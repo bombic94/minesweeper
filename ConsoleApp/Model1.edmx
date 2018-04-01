@@ -1,0 +1,587 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="postgresModel.Store" Provider="Npgsql" ProviderManifestToken="10.2" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="HRA">
+          <Key>
+            <PropertyRef Name="hra_id" />
+          </Key>
+          <Property Name="hra_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cas_prvni_tah" Type="timestamptz" Precision="7" />
+          <Property Name="cas_posledni_tah" Type="timestamptz" Precision="7" />
+          <Property Name="pocet_oznacenych_min" Type="int4" Nullable="false" />
+          <Property Name="oblast" Type="int4" />
+          <Property Name="stav" Type="int4" />
+        </EntityType>
+        <EntityType Name="MINA">
+          <Key>
+            <PropertyRef Name="mina_id" />
+          </Key>
+          <Property Name="mina_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="souradnice_x" Type="int4" />
+          <Property Name="souradnice_y" Type="int4" />
+          <Property Name="oblast" Type="int4" />
+        </EntityType>
+        <EntityType Name="OBLAST">
+          <Key>
+            <PropertyRef Name="oblast_id" />
+          </Key>
+          <Property Name="oblast_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="obtiznost" Type="int4" />
+        </EntityType>
+        <EntityType Name="OBTIZNOST">
+          <Key>
+            <PropertyRef Name="obtiznost_id" />
+          </Key>
+          <Property Name="obtiznost_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nazev" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="omezeni" Type="int4" Nullable="false" />
+          <Property Name="sirka" Type="int4" Nullable="false" />
+          <Property Name="vyska" Type="int4" Nullable="false" />
+          <Property Name="pocet_min" Type="int4" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OMEZENI">
+          <Key>
+            <PropertyRef Name="omezeni_id" />
+          </Key>
+          <Property Name="omezeni_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="sirka_max" Type="int4" />
+          <Property Name="sirka_min" Type="int4" />
+          <Property Name="vyska_max" Type="int4" />
+          <Property Name="vyska_min" Type="int4" />
+          <Property Name="pocet_min_max" Type="int4" />
+          <Property Name="pocet_min_min" Type="int4" />
+        </EntityType>
+        <EntityType Name="POLE">
+          <Key>
+            <PropertyRef Name="pole_id" />
+          </Key>
+          <Property Name="pole_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="souradnice_x" Type="int4" Nullable="false" />
+          <Property Name="souradnice_y" Type="int4" Nullable="false" />
+          <Property Name="je_mina" Type="bool" Nullable="false" />
+          <Property Name="sousedni_miny" Type="int4" Nullable="false" />
+          <Property Name="oblast" Type="int4" />
+          <Property Name="odkryto" Type="bool" Nullable="false" />
+        </EntityType>
+        <EntityType Name="STAV">
+          <Key>
+            <PropertyRef Name="stav_id" />
+          </Key>
+          <Property Name="stav_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nazev_stavu" Type="varchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TAH">
+          <Key>
+            <PropertyRef Name="tah_id" />
+          </Key>
+          <Property Name="tah_id" Type="int4" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="souradnice_x" Type="int4" Nullable="false" />
+          <Property Name="souradnice_y" Type="int4" Nullable="false" />
+          <Property Name="cas_tahu" Type="timestamptz" Precision="7" Nullable="false" />
+          <Property Name="oblast" Type="int4" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'postgres.public.CHYBNE_MINY' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CHYBNE_MINY">
+          <Property Name="pole_id" Type="int4" />
+          <Property Name="souradnice_x" Type="int4" />
+          <Property Name="souradnice_y" Type="int4" />
+          <Property Name="oblast" Type="int4" />
+          <Property Name="myedmxid" Type="int8" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'postgres.public.OBLAST_TISK' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="OBLAST_TISK">
+          <Property Name="pole_id" Type="int4" />
+          <Property Name="souradnice_y" Type="int4" />
+          <Property Name="radek" Type="varchar" MaxLength="8000" />
+          <Property Name="myedmxid" Type="int8" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'postgres.public.PORAZENI' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="PORAZENI">
+          <Property Name="hra_id" Type="int4" />
+          <Property Name="oblast" Type="int4" />
+          <Property Name="nazev" Type="varchar" MaxLength="30" />
+          <Property Name="pocet_min" Type="int4" />
+          <Property Name="sirka" Type="int4" />
+          <Property Name="vyska" Type="int4" />
+          <Property Name="cas_hry" Type="float8" />
+          <Property Name="pocet_odhalenych_min" Type="int8" />
+          <Property Name="myedmxid" Type="int8" />
+        </EntityType>-->
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'postgres.public.VITEZOVE' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="VITEZOVE">
+          <Property Name="hra_id" Type="int4" />
+          <Property Name="oblast" Type="int4" />
+          <Property Name="nazev" Type="varchar" MaxLength="30" />
+          <Property Name="pocet_min" Type="int4" />
+          <Property Name="sirka" Type="int4" />
+          <Property Name="vyska" Type="int4" />
+          <Property Name="cas_hry" Type="float8" />
+          <Property Name="myedmxid" Type="int8" />
+        </EntityType>-->
+        <Association Name="hraje_v_oblasti">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="HRA" Type="Self.HRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="HRA">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_omezena">
+          <End Role="OMEZENI" Type="Self.OMEZENI" Multiplicity="1" />
+          <End Role="OBTIZNOST" Type="Self.OBTIZNOST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OMEZENI">
+              <PropertyRef Name="omezeni_id" />
+            </Principal>
+            <Dependent Role="OBTIZNOST">
+              <PropertyRef Name="omezeni" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_v_oblasti">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="TAH" Type="Self.TAH" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="TAH">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_v_oblasti1">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="MINA" Type="Self.MINA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="MINA">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_v_oblasti2">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="POLE" Type="Self.POLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="POLE">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_ve_stavu">
+          <End Role="STAV" Type="Self.STAV" Multiplicity="0..1" />
+          <End Role="HRA" Type="Self.HRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STAV">
+              <PropertyRef Name="stav_id" />
+            </Principal>
+            <Dependent Role="HRA">
+              <PropertyRef Name="stav" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="obtiznost1">
+          <End Role="OBTIZNOST" Type="Self.OBTIZNOST" Multiplicity="0..1" />
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBTIZNOST">
+              <PropertyRef Name="obtiznost_id" />
+            </Principal>
+            <Dependent Role="OBLAST">
+              <PropertyRef Name="obtiznost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="postgresModelStoreContainer">
+          <EntitySet Name="HRA" EntityType="Self.HRA" Schema="public" store:Type="Tables" />
+          <EntitySet Name="MINA" EntityType="Self.MINA" Schema="public" store:Type="Tables" />
+          <EntitySet Name="OBLAST" EntityType="Self.OBLAST" Schema="public" store:Type="Tables" />
+          <EntitySet Name="OBTIZNOST" EntityType="Self.OBTIZNOST" Schema="public" store:Type="Tables" />
+          <EntitySet Name="OMEZENI" EntityType="Self.OMEZENI" Schema="public" store:Type="Tables" />
+          <EntitySet Name="POLE" EntityType="Self.POLE" Schema="public" store:Type="Tables" />
+          <EntitySet Name="STAV" EntityType="Self.STAV" Schema="public" store:Type="Tables" />
+          <EntitySet Name="TAH" EntityType="Self.TAH" Schema="public" store:Type="Tables" />
+          <AssociationSet Name="hraje_v_oblasti" Association="Self.hraje_v_oblasti">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="HRA" EntitySet="HRA" />
+          </AssociationSet>
+          <AssociationSet Name="je_omezena" Association="Self.je_omezena">
+            <End Role="OMEZENI" EntitySet="OMEZENI" />
+            <End Role="OBTIZNOST" EntitySet="OBTIZNOST" />
+          </AssociationSet>
+          <AssociationSet Name="je_v_oblasti" Association="Self.je_v_oblasti">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="TAH" EntitySet="TAH" />
+          </AssociationSet>
+          <AssociationSet Name="je_v_oblasti1" Association="Self.je_v_oblasti1">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="MINA" EntitySet="MINA" />
+          </AssociationSet>
+          <AssociationSet Name="je_v_oblasti2" Association="Self.je_v_oblasti2">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="POLE" EntitySet="POLE" />
+          </AssociationSet>
+          <AssociationSet Name="je_ve_stavu" Association="Self.je_ve_stavu">
+            <End Role="STAV" EntitySet="STAV" />
+            <End Role="HRA" EntitySet="HRA" />
+          </AssociationSet>
+          <AssociationSet Name="obtiznost1" Association="Self.obtiznost1">
+            <End Role="OBTIZNOST" EntitySet="OBTIZNOST" />
+            <End Role="OBLAST" EntitySet="OBLAST" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="postgresModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="HRA">
+          <Key>
+            <PropertyRef Name="hra_id" />
+          </Key>
+          <Property Name="hra_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cas_prvni_tah" Type="DateTimeOffset" Precision="7" />
+          <Property Name="cas_posledni_tah" Type="DateTimeOffset" Precision="7" />
+          <Property Name="pocet_oznacenych_min" Type="Int32" Nullable="false" />
+          <Property Name="oblast" Type="Int32" />
+          <Property Name="stav" Type="Int32" />
+          <NavigationProperty Name="OBLAST1" Relationship="Self.hraje_v_oblasti" FromRole="HRA" ToRole="OBLAST" />
+          <NavigationProperty Name="STAV1" Relationship="Self.je_ve_stavu" FromRole="HRA" ToRole="STAV" />
+        </EntityType>
+        <EntityType Name="MINA">
+          <Key>
+            <PropertyRef Name="mina_id" />
+          </Key>
+          <Property Name="mina_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="souradnice_x" Type="Int32" />
+          <Property Name="souradnice_y" Type="Int32" />
+          <Property Name="oblast" Type="Int32" />
+          <NavigationProperty Name="OBLAST1" Relationship="Self.je_v_oblasti1" FromRole="MINA" ToRole="OBLAST" />
+        </EntityType>
+        <EntityType Name="OBLAST">
+          <Key>
+            <PropertyRef Name="oblast_id" />
+          </Key>
+          <Property Name="oblast_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="obtiznost" Type="Int32" />
+          <NavigationProperty Name="HRA" Relationship="Self.hraje_v_oblasti" FromRole="OBLAST" ToRole="HRA" />
+          <NavigationProperty Name="MINA" Relationship="Self.je_v_oblasti1" FromRole="OBLAST" ToRole="MINA" />
+          <NavigationProperty Name="TAH" Relationship="Self.je_v_oblasti" FromRole="OBLAST" ToRole="TAH" />
+          <NavigationProperty Name="POLE" Relationship="Self.je_v_oblasti2" FromRole="OBLAST" ToRole="POLE" />
+          <NavigationProperty Name="OBTIZNOST1" Relationship="Self.obtiznost1" FromRole="OBLAST" ToRole="OBTIZNOST" />
+        </EntityType>
+        <EntityType Name="OBTIZNOST">
+          <Key>
+            <PropertyRef Name="obtiznost_id" />
+          </Key>
+          <Property Name="obtiznost_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nazev" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="omezeni" Type="Int32" Nullable="false" />
+          <Property Name="sirka" Type="Int32" Nullable="false" />
+          <Property Name="vyska" Type="Int32" Nullable="false" />
+          <Property Name="pocet_min" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="OBLAST" Relationship="Self.obtiznost1" FromRole="OBTIZNOST" ToRole="OBLAST" />
+          <NavigationProperty Name="OMEZENI1" Relationship="Self.je_omezena" FromRole="OBTIZNOST" ToRole="OMEZENI" />
+        </EntityType>
+        <EntityType Name="OMEZENI">
+          <Key>
+            <PropertyRef Name="omezeni_id" />
+          </Key>
+          <Property Name="omezeni_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="sirka_max" Type="Int32" />
+          <Property Name="sirka_min" Type="Int32" />
+          <Property Name="vyska_max" Type="Int32" />
+          <Property Name="vyska_min" Type="Int32" />
+          <Property Name="pocet_min_max" Type="Int32" />
+          <Property Name="pocet_min_min" Type="Int32" />
+          <NavigationProperty Name="OBTIZNOST" Relationship="Self.je_omezena" FromRole="OMEZENI" ToRole="OBTIZNOST" />
+        </EntityType>
+        <EntityType Name="POLE">
+          <Key>
+            <PropertyRef Name="pole_id" />
+          </Key>
+          <Property Name="pole_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="souradnice_x" Type="Int32" Nullable="false" />
+          <Property Name="souradnice_y" Type="Int32" Nullable="false" />
+          <Property Name="je_mina" Type="Boolean" Nullable="false" />
+          <Property Name="sousedni_miny" Type="Int32" Nullable="false" />
+          <Property Name="oblast" Type="Int32" />
+          <Property Name="odkryto" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="OBLAST1" Relationship="Self.je_v_oblasti2" FromRole="POLE" ToRole="OBLAST" />
+        </EntityType>
+        <EntityType Name="STAV">
+          <Key>
+            <PropertyRef Name="stav_id" />
+          </Key>
+          <Property Name="stav_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nazev_stavu" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="HRA" Relationship="Self.je_ve_stavu" FromRole="STAV" ToRole="HRA" />
+        </EntityType>
+        <EntityType Name="TAH">
+          <Key>
+            <PropertyRef Name="tah_id" />
+          </Key>
+          <Property Name="tah_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="souradnice_x" Type="Int32" Nullable="false" />
+          <Property Name="souradnice_y" Type="Int32" Nullable="false" />
+          <Property Name="cas_tahu" Type="DateTimeOffset" Precision="7" Nullable="false" />
+          <Property Name="oblast" Type="Int32" />
+          <NavigationProperty Name="OBLAST1" Relationship="Self.je_v_oblasti" FromRole="TAH" ToRole="OBLAST" />
+        </EntityType>
+        <Association Name="hraje_v_oblasti">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="HRA" Type="Self.HRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="HRA">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_ve_stavu">
+          <End Role="STAV" Type="Self.STAV" Multiplicity="0..1" />
+          <End Role="HRA" Type="Self.HRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="STAV">
+              <PropertyRef Name="stav_id" />
+            </Principal>
+            <Dependent Role="HRA">
+              <PropertyRef Name="stav" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_v_oblasti1">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="MINA" Type="Self.MINA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="MINA">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_v_oblasti">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="TAH" Type="Self.TAH" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="TAH">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_v_oblasti2">
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="0..1" />
+          <End Role="POLE" Type="Self.POLE" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBLAST">
+              <PropertyRef Name="oblast_id" />
+            </Principal>
+            <Dependent Role="POLE">
+              <PropertyRef Name="oblast" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="obtiznost1">
+          <End Role="OBTIZNOST" Type="Self.OBTIZNOST" Multiplicity="0..1" />
+          <End Role="OBLAST" Type="Self.OBLAST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OBTIZNOST">
+              <PropertyRef Name="obtiznost_id" />
+            </Principal>
+            <Dependent Role="OBLAST">
+              <PropertyRef Name="obtiznost" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="je_omezena">
+          <End Role="OMEZENI" Type="Self.OMEZENI" Multiplicity="1" />
+          <End Role="OBTIZNOST" Type="Self.OBTIZNOST" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OMEZENI">
+              <PropertyRef Name="omezeni_id" />
+            </Principal>
+            <Dependent Role="OBTIZNOST">
+              <PropertyRef Name="omezeni" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="postgresEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="HRA" EntityType="Self.HRA" />
+          <EntitySet Name="MINA" EntityType="Self.MINA" />
+          <EntitySet Name="OBLAST" EntityType="Self.OBLAST" />
+          <EntitySet Name="OBTIZNOST" EntityType="Self.OBTIZNOST" />
+          <EntitySet Name="OMEZENI" EntityType="Self.OMEZENI" />
+          <EntitySet Name="POLE" EntityType="Self.POLE" />
+          <EntitySet Name="STAV" EntityType="Self.STAV" />
+          <EntitySet Name="TAH" EntityType="Self.TAH" />
+          <AssociationSet Name="hraje_v_oblasti" Association="Self.hraje_v_oblasti">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="HRA" EntitySet="HRA" />
+          </AssociationSet>
+          <AssociationSet Name="je_ve_stavu" Association="Self.je_ve_stavu">
+            <End Role="STAV" EntitySet="STAV" />
+            <End Role="HRA" EntitySet="HRA" />
+          </AssociationSet>
+          <AssociationSet Name="je_v_oblasti1" Association="Self.je_v_oblasti1">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="MINA" EntitySet="MINA" />
+          </AssociationSet>
+          <AssociationSet Name="je_v_oblasti" Association="Self.je_v_oblasti">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="TAH" EntitySet="TAH" />
+          </AssociationSet>
+          <AssociationSet Name="je_v_oblasti2" Association="Self.je_v_oblasti2">
+            <End Role="OBLAST" EntitySet="OBLAST" />
+            <End Role="POLE" EntitySet="POLE" />
+          </AssociationSet>
+          <AssociationSet Name="obtiznost1" Association="Self.obtiznost1">
+            <End Role="OBTIZNOST" EntitySet="OBTIZNOST" />
+            <End Role="OBLAST" EntitySet="OBLAST" />
+          </AssociationSet>
+          <AssociationSet Name="je_omezena" Association="Self.je_omezena">
+            <End Role="OMEZENI" EntitySet="OMEZENI" />
+            <End Role="OBTIZNOST" EntitySet="OBTIZNOST" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="postgresModelStoreContainer" CdmEntityContainer="postgresEntities">
+          <EntitySetMapping Name="HRA">
+            <EntityTypeMapping TypeName="postgresModel.HRA">
+              <MappingFragment StoreEntitySet="HRA">
+                <ScalarProperty Name="hra_id" ColumnName="hra_id" />
+                <ScalarProperty Name="cas_prvni_tah" ColumnName="cas_prvni_tah" />
+                <ScalarProperty Name="cas_posledni_tah" ColumnName="cas_posledni_tah" />
+                <ScalarProperty Name="pocet_oznacenych_min" ColumnName="pocet_oznacenych_min" />
+                <ScalarProperty Name="oblast" ColumnName="oblast" />
+                <ScalarProperty Name="stav" ColumnName="stav" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MINA">
+            <EntityTypeMapping TypeName="postgresModel.MINA">
+              <MappingFragment StoreEntitySet="MINA">
+                <ScalarProperty Name="mina_id" ColumnName="mina_id" />
+                <ScalarProperty Name="souradnice_x" ColumnName="souradnice_x" />
+                <ScalarProperty Name="souradnice_y" ColumnName="souradnice_y" />
+                <ScalarProperty Name="oblast" ColumnName="oblast" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBLAST">
+            <EntityTypeMapping TypeName="postgresModel.OBLAST">
+              <MappingFragment StoreEntitySet="OBLAST">
+                <ScalarProperty Name="oblast_id" ColumnName="oblast_id" />
+                <ScalarProperty Name="obtiznost" ColumnName="obtiznost" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OBTIZNOST">
+            <EntityTypeMapping TypeName="postgresModel.OBTIZNOST">
+              <MappingFragment StoreEntitySet="OBTIZNOST">
+                <ScalarProperty Name="obtiznost_id" ColumnName="obtiznost_id" />
+                <ScalarProperty Name="nazev" ColumnName="nazev" />
+                <ScalarProperty Name="omezeni" ColumnName="omezeni" />
+                <ScalarProperty Name="sirka" ColumnName="sirka" />
+                <ScalarProperty Name="vyska" ColumnName="vyska" />
+                <ScalarProperty Name="pocet_min" ColumnName="pocet_min" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OMEZENI">
+            <EntityTypeMapping TypeName="postgresModel.OMEZENI">
+              <MappingFragment StoreEntitySet="OMEZENI">
+                <ScalarProperty Name="omezeni_id" ColumnName="omezeni_id" />
+                <ScalarProperty Name="sirka_max" ColumnName="sirka_max" />
+                <ScalarProperty Name="sirka_min" ColumnName="sirka_min" />
+                <ScalarProperty Name="vyska_max" ColumnName="vyska_max" />
+                <ScalarProperty Name="vyska_min" ColumnName="vyska_min" />
+                <ScalarProperty Name="pocet_min_max" ColumnName="pocet_min_max" />
+                <ScalarProperty Name="pocet_min_min" ColumnName="pocet_min_min" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="POLE">
+            <EntityTypeMapping TypeName="postgresModel.POLE">
+              <MappingFragment StoreEntitySet="POLE">
+                <ScalarProperty Name="pole_id" ColumnName="pole_id" />
+                <ScalarProperty Name="souradnice_x" ColumnName="souradnice_x" />
+                <ScalarProperty Name="souradnice_y" ColumnName="souradnice_y" />
+                <ScalarProperty Name="je_mina" ColumnName="je_mina" />
+                <ScalarProperty Name="sousedni_miny" ColumnName="sousedni_miny" />
+                <ScalarProperty Name="oblast" ColumnName="oblast" />
+                <ScalarProperty Name="odkryto" ColumnName="odkryto" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="STAV">
+            <EntityTypeMapping TypeName="postgresModel.STAV">
+              <MappingFragment StoreEntitySet="STAV">
+                <ScalarProperty Name="stav_id" ColumnName="stav_id" />
+                <ScalarProperty Name="nazev_stavu" ColumnName="nazev_stavu" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TAH">
+            <EntityTypeMapping TypeName="postgresModel.TAH">
+              <MappingFragment StoreEntitySet="TAH">
+                <ScalarProperty Name="tah_id" ColumnName="tah_id" />
+                <ScalarProperty Name="souradnice_x" ColumnName="souradnice_x" />
+                <ScalarProperty Name="souradnice_y" ColumnName="souradnice_y" />
+                <ScalarProperty Name="cas_tahu" ColumnName="cas_tahu" />
+                <ScalarProperty Name="oblast" ColumnName="oblast" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
