@@ -204,7 +204,8 @@ namespace ConsoleApp
                         }
                         else
                         {
-                            if (pole.sousedni_miny == 0){
+                            if (pole.sousedni_miny == 0)
+                            {
                                 Console.Write("X  ");
                             }
                             else
