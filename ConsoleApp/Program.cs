@@ -37,24 +37,31 @@ namespace ConsoleApp
                 TiskOblasti(oblast_id);
                 TiskInfo();
                 String response = Console.ReadLine();
-                String[] arr = response.Split();
-                int x = int.Parse(arr[1]);
-                int y = int.Parse(arr[2]);
-                switch (arr[0])
-                {
-                    case ("F"):
-                        OdkrytiPole(oblast_id, x, y);
-                        break;
-                    case ("M"):
-                        OznaceniMiny(oblast_id, x, y);
-                        break;
-                    case ("U"):
-                        ZruseniMiny(oblast_id, x, y);
-                        break;
-                    default:
-                        Console.WriteLine("Wrong param");
-                        break;
+                String[] args = response.Split();
+
+                if (args.Length == 3 && int.TryParse(args[1], out int x) && int.TryParse(args[2], out int y))
+                    {
+                    switch (args[0])
+                    {
+                        case ("F"):
+                            OdkrytiPole(oblast_id, x, y);
+                            break;
+                        case ("M"):
+                            OznaceniMiny(oblast_id, x, y);
+                            break;
+                        case ("U"):
+                            ZruseniMiny(oblast_id, x, y);
+                            break;
+                        default:
+                            Console.WriteLine("Wrong param");
+                            break;
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("Wrong param");
+                }
+
             }
         }
 
@@ -92,37 +99,44 @@ namespace ConsoleApp
             while (!selected)
             {
                 String response = Console.ReadLine();
-                String[] arr = response.Split();
-                switch (arr[0])
+                String[] args = response.Split();
+
+                if (args.Length == 2 && int.TryParse(args[1], out int parsed))
                 {
-                    case ("N"):
-                        int obt = int.Parse(arr[1]);
-                        if (obt >= 1 && obt <= 3)
-                        {
-                            oblast = NovaHra(obt);
-                            selected = true;
-                        }
-                        else
-                        {
+                    switch (args[0])
+                    {
+                        case ("N"):
+                            if (parsed >= 1 && parsed <= 3)
+                            {
+                                oblast = NovaHra(parsed);
+                                selected = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Wrong param");
+                            }
+                            break;
+                        case ("R"):
+                            if (runningGames.Contains(parsed))
+                            {
+                                oblast = parsed;
+                                selected = true;
+                            }
+                            else
+                            {
+                                Console.WriteLine("Wrong param");
+                            }
+                            break;
+                        default:
                             Console.WriteLine("Wrong param");
-                        }
-                        break;
-                    case ("R"):
-                        int obl = int.Parse(arr[1]);
-                        if (runningGames.Contains(obl))
-                        {
-                            oblast = obl;
-                            selected = true;
-                        }
-                        else
-                        {
-                            Console.WriteLine("Wrong param");
-                        }
-                        break;
-                    default:
-                        Console.WriteLine("Wrong param");
-                        break;
+                            break;
+                    }
                 }
+                else
+                {
+                    Console.WriteLine("Wrong param");
+                }
+
             }
             Console.WriteLine("Selected game id: " + oblast);
             return oblast;
@@ -215,7 +229,7 @@ namespace ConsoleApp
                         }
                     }
                 }
-                Console.Write("\n ");
+                Console.Write("\n");
             }
         }
 
