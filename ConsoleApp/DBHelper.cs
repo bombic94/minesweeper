@@ -180,5 +180,21 @@ namespace ConsoleApp
                 return listMin;
             }
         }
+
+        public static int MaxMinesToMark(int obl_id)
+        {
+            using (var db = new postgresEntities())
+            {
+                var obtiznost = (from o in db.OBTIZNOST
+                                 join obl in db.OBLAST on o.obtiznost_id equals obl.obtiznost
+                                 where obl.oblast_id == obl_id
+                                 select o).Single();
+                var hra = (from h in db.HRA
+                           join obl in db.OBLAST on h.oblast equals obl.oblast_id
+                           where obl.oblast_id == obl_id
+                           select h).Single();
+                return obtiznost.pocet_min - hra.pocet_oznacenych_min;
+            }
+        }
     }
 }

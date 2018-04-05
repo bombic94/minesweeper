@@ -33,8 +33,10 @@ namespace ConsoleApp
         void Hrej(int oblast_id)
         {
             int stav = DBHelper.CheckEndOfGame(oblast_id);
+            int minesToMark = DBHelper.MaxMinesToMark(oblast_id);
             while (stav == (int) DBHelper.State.Playing)
             {
+                Console.WriteLine("Remaining mines to mark:" + minesToMark);
                 PrintField(oblast_id);
                 PrintHelper.PrintMoveInfo();
                 String response = Console.ReadLine();
@@ -49,9 +51,11 @@ namespace ConsoleApp
                             break;
                         case ("M"):
                             DBHelper.MarkMine(oblast_id, x, y);
+                            minesToMark--;
                             break;
                         case ("U"):
                             DBHelper.UnmarkMine(oblast_id, x, y);
+                            minesToMark++;
                             break;
                         default:
                             Console.WriteLine("Wrong param");
@@ -67,7 +71,7 @@ namespace ConsoleApp
                     Console.WriteLine("Wrong param");
                 }
                 stav = DBHelper.CheckEndOfGame(oblast_id);
-
+               
             }
             if (stav == (int) DBHelper.State.Won)
             {
