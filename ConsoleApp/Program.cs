@@ -12,12 +12,10 @@ namespace ConsoleApp
     {
         
         /// <summary>
-        /// Start programu - načtení rozehraných her, možnost přidat novou
-        /// uložit do globální proměnné id oblasti
-        /// možnosti hry, po každé tisknout oblast
-        /// 
+        /// Start of program
+        /// Creation of new game
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">Input arguments</param>
         static void Main(string[] args)
         {
             Game game = new Game();

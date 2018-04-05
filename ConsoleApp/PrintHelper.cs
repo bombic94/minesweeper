@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
+    /// <summary>
+    /// Static class - takes care of printing information during playing.
+    /// </summary>
     static class PrintHelper
     {
+
+        /// <summary>
+        /// Print info at the start of the game.
+        /// </summary>
         public static void PrintWelcome()
         {
             Console.WriteLine("Welcome to Minesweeper game");
@@ -17,6 +24,9 @@ namespace ConsoleApp
             Console.WriteLine("To start new game input: 'N [level]'");
         }
 
+        /// <summary>
+        /// Print info for each move.
+        /// </summary>
         public static void PrintMoveInfo()
         {
             Console.WriteLine("Show new field by instruction 'F [x] [y]'");

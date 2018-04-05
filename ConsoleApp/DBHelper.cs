@@ -6,12 +6,23 @@ using System.Threading.Tasks;
 
 namespace ConsoleApp
 {
+    /// <summary>
+    /// Static class - takes care of communication with database
+    /// </summary>
     static class DBHelper
     {
-        public enum Level { Begginer=1, Advanced=2, Expert=3 }
-
+        /// <summary>
+        /// Enum representing state of the game
+        /// 1 - Playing: game is not finished
+        /// 2 - Won: game is finished, player had won
+        /// 3 - Lost: game is finished, player had lost
+        /// </summary>
         public enum State { Playing=1, Won=2, Lost=3 }
 
+        /// <summary>
+        /// Method for obtaining list of games, which have not been finished
+        /// </summary>
+        /// <returns>List of IDs of non-finished games</returns>
         public static List<int> getListOfRunnningGames()
         {
             List<int> runningGames = new List<int>();
@@ -29,13 +40,16 @@ namespace ConsoleApp
                     runningGames.Add(result.obl.oblast_id);
                     Console.WriteLine("Game: [id=" + result.obl.oblast_id + "], [level=" + result.obl.obtiznost + "] + [mines selected=" + result.hra.pocet_oznacenych_min + "]");
                 }
+                if (runningGames.Count == 0)
+                {
+                    Console.WriteLine("No games running, start a new game.");
+                }
             }
             return runningGames;
         }
 
         /// <summary>
-        /// Game is created by inserting new row in table "oblast".
-        /// This method creates new oblast and returns its id
+        /// Create new OBLAST with selected level of game (OBTIZNOST)
         /// </summary>
         /// <param name="obt">
         /// ID of level of game:
@@ -43,7 +57,7 @@ namespace ConsoleApp
         /// 2 - advanced
         /// 3 - expert
         /// </param>
-        /// <returns></returns>
+        /// <returns>ID of OBLAST of created game, which will be used for playing</returns>
         public static int AddGame(int obt)
         {
             using (var db = new postgresEntities())
@@ -64,14 +78,19 @@ namespace ConsoleApp
                 }
                 catch (Exception e)
                 {
-
-                    Console.WriteLine(e.InnerException.Message);
+                    Console.WriteLine(e.InnerException.InnerException.Message);
                     return -1;
                 }
                
             }
         }
 
+        /// <summary>
+        /// Show selected field (represents left click of the mouse)
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coordinate</param>
         public static void ShowField(int obl_id, int x, int y)
         {
             using (var db = new postgresEntities())
@@ -91,12 +110,17 @@ namespace ConsoleApp
                 }
                 catch (Exception e)
                 {
-
-                    Console.WriteLine(e.InnerException.Message);
+                    Console.WriteLine(e.InnerException.InnerException.Message);
                 }
             }
         }
 
+        /// <summary>
+        /// Mark selected field as a mine (represents right click of the mouse)
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coordinate</param>
         public static void MarkMine(int obl_id, int x, int y)
         {
             using (var db = new postgresEntities())
@@ -116,12 +140,17 @@ namespace ConsoleApp
                 }
                 catch (Exception e)
                 {
-
-                    Console.WriteLine(e.InnerException.Message);
+                    Console.WriteLine(e.InnerException.InnerException.Message);
                 }
             }
         }
 
+        /// <summary>
+        /// Unmark selected field as a mine (represents right click of the mouse on marked mine)
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <param name="x">x coordinate</param>
+        /// <param name="y">y coordinate</param>ID of OBLAST of played game
         public static void UnmarkMine(int obl_id, int x, int y)
         {
             using (var db = new postgresEntities())
@@ -140,12 +169,16 @@ namespace ConsoleApp
                 }
                 catch (Exception e)
                 {
-
-                    Console.WriteLine(e.InnerException.Message);
+                    Console.WriteLine(e.InnerException.InnerException.Message);
                 }
             }
         }
 
+        /// <summary>
+        /// Check state of game (HRA) and return its value
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <returns>Value of game state</returns>
         public static int CheckEndOfGame(int obl_id)
         {
             using (var db = new postgresEntities())
@@ -158,6 +191,11 @@ namespace ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Get list of all fields in played game, order by rows and columns
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game<</param>
+        /// <returns>Ordered list of fields in played game</returns>
         public static List<POLE> getListPoli(int obl_id)
         {
             using (var db = new postgresEntities())
@@ -170,6 +208,11 @@ namespace ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Get list of all mines in played game
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <returns>List of mines in played game</returns>
         public static List<MINA> getListMin(int obl_id)
         {
             using (var db = new postgresEntities())
@@ -181,6 +224,11 @@ namespace ConsoleApp
             }
         }
 
+        /// <summary>
+        /// Get maximum value of mines, which can be marked in selected game.
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <returns>Value of mines to be marked</returns>
         public static int MaxMinesToMark(int obl_id)
         {
             using (var db = new postgresEntities())

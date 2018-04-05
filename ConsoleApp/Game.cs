@@ -8,15 +8,31 @@ namespace ConsoleApp
 {
     class Game
     {
+        /// <summary>
+        /// List of running games, player can select one of these games or start a new one
+        /// </summary>
         List<int> runningGames;
 
+        /// <summary>
+        /// ID of OBLAST of played game, is used for most of operations with database
+        /// </summary>
         int oblast_id;
 
+        /// <summary>
+        /// Constructor, calls method to set Game
+        /// </summary>
         public Game()
         {          
             setGame();
         }
 
+        /// <summary>
+        /// In infinite loop repeat folowing steps:
+        /// - Print welcome info
+        /// - Retrive list of running games
+        /// - Let player choose between continuing running game or creating a new one
+        /// - Play the game
+        /// </summary>
         private void setGame()
         {
             while (true)
@@ -24,13 +40,20 @@ namespace ConsoleApp
                 PrintHelper.PrintWelcome();
                 runningGames = DBHelper.getListOfRunnningGames();
                 oblast_id = CreateOrSelectGame(runningGames);
-                Hrej(oblast_id);
+                Play(oblast_id);
                 Console.Read();
             }   
         }
-        
 
-        void Hrej(int oblast_id)
+        /// <summary>
+        /// Loop which takes care of each round of the game. 
+        /// In each iteration check, if the game hasn't finished, based on given argument
+        /// select operation to execute.
+        /// Print the whole area to player, also information about remaining mines.
+        /// If game is finished, inform player about losing or winning
+        /// </summary>
+        /// <param name="oblast_id">ID of OBLAST of played game</param>
+        private void Play(int oblast_id)
         {
             int stav = DBHelper.CheckEndOfGame(oblast_id);
             int minesToMark = DBHelper.MaxMinesToMark(oblast_id);
@@ -84,8 +107,11 @@ namespace ConsoleApp
             Console.WriteLine("Press enter to start again");
         }
 
-        
-
+        /// <summary>
+        /// Let player choose between continuing in running game or creating a new one.
+        /// </summary>
+        /// <param name="runningGames">List of running games</param>
+        /// <returns>ID of OBLAST of played game</returns>
         int CreateOrSelectGame(List<int> runningGames)
         {
             bool selected = false;
@@ -134,8 +160,18 @@ namespace ConsoleApp
             }
             Console.WriteLine("Selected game id: " + oblast);
             return oblast;
-        }     
+        }
 
+        /// <summary>
+        /// Print whole area of played game to console
+        /// For better orientation print coordinates
+        /// Signs used:
+        /// "?" marked mine
+        /// "_" field still not shown or marked
+        /// "X" shown field with no nighbour mines
+        /// "n" (n is in range 1 - 8) shown field with "n" of neighbour mines
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
         void PrintField(int obl_id)
         {
             List<POLE> listPoli = DBHelper.getListPoli(obl_id);
