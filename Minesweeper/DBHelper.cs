@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp
+namespace Minesweeper
 {
     /// <summary>
     /// Static class - takes care of communication with database
@@ -192,6 +192,17 @@ namespace ConsoleApp
             }
         }
 
+        public static OBTIZNOST getLevelInfo(int obl_id)
+        {
+            using (var db = new postgresEntities())
+            {
+                var obtiznost = (from o in db.OBTIZNOST
+                                 join obl in db.OBLAST on o.obtiznost_id equals obl.obtiznost
+                                 where obl.oblast_id == obl_id
+                                 select o).Single();
+                return obtiznost;
+            }
+        }
         /// <summary>
         /// Get list of all fields in played game, order by rows and columns
         /// </summary>

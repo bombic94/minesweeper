@@ -7,6 +7,24 @@
         mc:Ignorable="d"
         Title="Minesweeper" Height="768" Width="1024" MinWidth="600" MinHeight="390">
     <Grid>
-
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_Game">
+                    <MenuItem Header="_Beginner" Click="MenuItem_Start" Name="Beginner"/>
+                    <MenuItem Header="_Advanced" Click="MenuItem_Start" Name="Advanced"/>
+                    <MenuItem Header="_Expert" Click="MenuItem_Start" Name="Expert"/>
+                    <Separator />
+                    <MenuItem Header="_Continue" Click="MenuItem_Continue"/>
+                    <Separator />
+                    <MenuItem Header="_Quit game" Click="MenuItem_Quit"/>
+                </MenuItem>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_How to play" Click="MenuItem_HowTo"/>
+                    <MenuItem Header="_About" Click="MenuItem_About"/>
+                </MenuItem>
+            </Menu>
+            <StackPanel></StackPanel>
+        </DockPanel>
+        
     </Grid>
 </Window>
