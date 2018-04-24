@@ -298,5 +298,35 @@ namespace Minesweeper
                 return games;
             }
         }
+
+        public static int AddObtiznost(int selectedHeight, int selectedWidth, int selectedMine)
+        {
+            using (var db = new postgresEntities())
+            {
+                int id = db.OBTIZNOST.Count() + 1;
+                var obtiznost = new OBTIZNOST
+                {
+                    nazev = "custom",
+                    omezeni = 1,
+                    vyska = selectedHeight,
+                    sirka = selectedWidth,
+                    pocet_min = selectedMine,
+                    obtiznost_id = id
+                };
+
+                db.OBTIZNOST.Add(obtiznost);
+                try
+                {
+                    db.SaveChanges();
+                    db.Entry(obtiznost).GetDatabaseValues();
+
+                    return obtiznost.obtiznost_id;
+                }
+                catch (Exception e)
+                {
+                    return -1;
+                }
+            }
+        }
     }
 }

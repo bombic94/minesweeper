@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel"
         mc:Ignorable="d"
-        Title="CustomWindow" Height="152.742" Width="300">
+        Title="CustomWindow" Height="200" Width="250" MinHeight="200" MaxHeight="200" MinWidth="250" MaxWidth="250">
     <Window.DataContext>
         <MyViewModel:CustomVM/>
     </Window.DataContext>
@@ -14,10 +14,15 @@
         <Label Content="Height" HorizontalAlignment="Left" Margin="20,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Width" HorizontalAlignment="Left" Margin="20,45,0,0" VerticalAlignment="Top"/>
         <Label Content="Mines" HorizontalAlignment="Left" Margin="20,80,0,0" VerticalAlignment="Top"/>
-        <ComboBox HorizontalAlignment="Left" 
-                  ItemsSource="{Binding Path=Heights}"
-                  Margin="100,14,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Path=Widths}" Margin="100,49,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox HorizontalAlignment="Left" Margin="100,84,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Path=Heights, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=SelectedHeight}" IsSynchronizedWithCurrentItem="True" Margin="100,14,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Path=Widths, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Path=SelectedWidth}" IsSynchronizedWithCurrentItem="True" Margin="100,49,0,0" VerticalAlignment="Top" Width="120"/>
+        <ComboBox HorizontalAlignment="Left" ItemsSource="{Binding Path=Mines, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding Mode=TwoWay, UpdateSourceTrigger=PropertyChanged,Path=SelectedMine}" IsSynchronizedWithCurrentItem="True" Margin="100,84,0,0" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="btn" 
+                Margin="100,119,22,10" 
+                Content="Start" 
+                IsEnabled="True" 
+                Command="{Binding Path=StartCommand}" 
+                CommandParameter="{Binding ElementName=lst, Path=SelectedItem}">
+        </Button>
     </Grid>
 </Window>
