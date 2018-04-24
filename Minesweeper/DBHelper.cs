@@ -29,28 +29,11 @@ namespace Minesweeper
             List<int> runningGames = new List<int>();
             using (var db = new postgresEntities())
             {
-                Console.WriteLine("Running games:");
                 var results = db.HRA
                     .Where(h => h.stav == (int)State.Playing)
                     .Include(h => h.OBLAST1)
                     .OrderBy(h => h.hra_id)
                     .ToList();
-            /*    var results = (from hra in db.HRA
-                              join obl in db.OBLAST on hra.oblast equals obl.oblast_id
-                              
-                              where hra.stav == (int) State.Playing
-                              orderby hra.hra_id
-                              select hra).ToList();*/
-
-                //foreach (var result in results)
-                //{
-                //runningGames.Add(result.obl.oblast_id);
-                //Console.WriteLine("Game: [id=" + result.obl.oblast_id + "], [level=" + result.obl.obtiznost + "] + [mines selected=" + result.hra.pocet_oznacenych_min + "]");
-                //}
-                //if (runningGames.Count == 0)
-                //{
-                //Console.WriteLine("No games running, start a new game.");
-                //}
                 return results;
             }
             
@@ -80,13 +63,11 @@ namespace Minesweeper
                 {
                     db.SaveChanges();
                     db.Entry(oblast).GetDatabaseValues();
-
-                    Console.WriteLine("New game created");
+                    
                     return oblast.oblast_id;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.InnerException.InnerException.Message);
                     return -1;
                 }
                
@@ -164,11 +145,11 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var mina = (from m in db.MINA
-                            where m.oblast == obl_id
-                            where m.souradnice_x == x
-                            where m.souradnice_y == y
-                            select m).Single();
+                var mina = db.MINA
+                    .Where(m => m.oblast == obl_id)
+                    .Where(m => m.souradnice_x == x)
+                    .Where(m => m.souradnice_y == y)
+                    .Single();
 
                 db.MINA.Remove(mina);
 

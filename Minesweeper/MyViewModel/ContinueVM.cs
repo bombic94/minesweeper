@@ -27,6 +27,7 @@ namespace Minesweeper.MyViewModel
                 selectCommand = value;
             }
         }
+
         public ContinueVM()
         {
             SelectCommand = new RelayCommand(param => this.SelectGame(param));

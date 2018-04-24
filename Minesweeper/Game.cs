@@ -61,7 +61,7 @@ namespace Minesweeper
             {
                 Console.WriteLine("Remaining mines to mark:" + minesToMark);
                 PrintField(oblast_id);
-                PrintHelper.PrintMoveInfo();
+                //PrintHelper.PrintMoveInfo();
                 String response = Console.ReadLine();
                 String[] args = response.Split();
 
