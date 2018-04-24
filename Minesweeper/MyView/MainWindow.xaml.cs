@@ -90,25 +90,33 @@ namespace Minesweeper
             }
         }
 
+        private void MenuItem_Custom(object sender, RoutedEventArgs e)
+        {
+            CustomWindow cusWin = new CustomWindow();
+            cusWin.ShowDialog();
+        }
+
         private void MenuItem_Continue(object sender, RoutedEventArgs e)
         {
             ContinueWindow conWin = new ContinueWindow();
-            conWin.Show();
+            conWin.ShowDialog();
         }
 
         private void MenuItem_Quit(object sender, RoutedEventArgs e)
         {
-
+            this.Close();
         }
 
         private void MenuItem_HowTo(object sender, RoutedEventArgs e)
         {
-
+            HowToWindow htWin = new HowToWindow();
+            htWin.ShowDialog();
         }
 
         private void MenuItem_About(object sender, RoutedEventArgs e)
         {
-
+            AboutWindow abWin = new AboutWindow();
+            abWin.ShowDialog();
         }
     }
 }
