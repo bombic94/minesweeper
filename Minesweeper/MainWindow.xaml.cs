@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Minesweeper.MyView;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -91,7 +92,8 @@ namespace Minesweeper
 
         private void MenuItem_Continue(object sender, RoutedEventArgs e)
         {
-
+            ContinueWindow conWin = new ContinueWindow();
+            conWin.Show();
         }
 
         private void MenuItem_Quit(object sender, RoutedEventArgs e)

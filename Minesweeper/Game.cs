@@ -35,14 +35,14 @@ namespace Minesweeper
         /// </summary>
         private void setGame()
         {
-            while (true)
+           /* while (true)
             {
                 PrintHelper.PrintWelcome();
                 runningGames = DBHelper.getListOfRunnningGames();
                 oblast_id = CreateOrSelectGame(runningGames);
                 Play(oblast_id);
                 Console.Read();
-            }   
+            }  */ 
         }
 
         /// <summary>

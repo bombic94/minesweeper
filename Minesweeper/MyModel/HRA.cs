@@ -20,5 +20,16 @@ namespace Minesweeper
                 .ToString();
             return result;
         }
+
+        public double time { get
+            {
+                if (cas_posledni_tah.HasValue && cas_prvni_tah.HasValue)
+                {
+                    TimeSpan t = cas_posledni_tah.Value - cas_prvni_tah.Value;
+                    return t.TotalSeconds;
+                }
+                return 0;
+            }
+        }
     }
 }

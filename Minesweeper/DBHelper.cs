@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,29 +24,36 @@ namespace Minesweeper
         /// Method for obtaining list of games, which have not been finished
         /// </summary>
         /// <returns>List of IDs of non-finished games</returns>
-        public static List<int> getListOfRunnningGames()
+        public static List<HRA> getListOfRunnningGames()
         {
             List<int> runningGames = new List<int>();
             using (var db = new postgresEntities())
             {
                 Console.WriteLine("Running games:");
-                var results = from hra in db.HRA
+                var results = db.HRA
+                    .Where(h => h.stav == (int)State.Playing)
+                    .Include(h => h.OBLAST1)
+                    .OrderBy(h => h.hra_id)
+                    .ToList();
+            /*    var results = (from hra in db.HRA
                               join obl in db.OBLAST on hra.oblast equals obl.oblast_id
+                              
                               where hra.stav == (int) State.Playing
                               orderby hra.hra_id
-                              select new { hra, obl };
+                              select hra).ToList();*/
 
-                foreach (var result in results)
-                {
-                    runningGames.Add(result.obl.oblast_id);
-                    Console.WriteLine("Game: [id=" + result.obl.oblast_id + "], [level=" + result.obl.obtiznost + "] + [mines selected=" + result.hra.pocet_oznacenych_min + "]");
-                }
-                if (runningGames.Count == 0)
-                {
-                    Console.WriteLine("No games running, start a new game.");
-                }
+                //foreach (var result in results)
+                //{
+                //runningGames.Add(result.obl.oblast_id);
+                //Console.WriteLine("Game: [id=" + result.obl.oblast_id + "], [level=" + result.obl.obtiznost + "] + [mines selected=" + result.hra.pocet_oznacenych_min + "]");
+                //}
+                //if (runningGames.Count == 0)
+                //{
+                //Console.WriteLine("No games running, start a new game.");
+                //}
+                return results;
             }
-            return runningGames;
+            
         }
 
         /// <summary>

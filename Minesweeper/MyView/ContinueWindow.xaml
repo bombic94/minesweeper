@@ -1,0 +1,56 @@
+﻿<Window x:Class="Minesweeper.MyView.ContinueWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Minesweeper.MyView"
+        xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel"
+        mc:Ignorable="d"
+        Title="ContinueWindow" Height="450" Width="450">
+    <Window.DataContext>
+        <MyViewModel:ContinueVM/>
+    </Window.DataContext>
+    <Grid>
+        <ListView x:Name="lst" ItemsSource="{Binding Path=Hry, Mode=TwoWay}" SelectionChanged="ListView_SelectionChanged" Margin="10 10 10 50">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn  Header="ID" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OBLAST1.oblast_id}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Level" Width="100">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OBLAST1.obtiznost}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Marked mines" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding pocet_oznacenych_min}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Time" Width="120">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding time}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <Button x:Name="btn" 
+                Margin="300 375 10 10" 
+                Content="Select" 
+                IsEnabled="False" 
+                Command="{Binding Path=SelectCommand}" 
+                CommandParameter="{Binding ElementName=lst, Path=SelectedItem}">
+        </Button>
+    </Grid>
+</Window>
