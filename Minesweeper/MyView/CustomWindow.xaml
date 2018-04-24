@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel"
         mc:Ignorable="d"
-        Title="CustomWindow" Height="200" Width="250" MinHeight="200" MaxHeight="200" MinWidth="250" MaxWidth="250">
+        Title="Custom game level" Height="200" Width="250" MinHeight="200" MaxHeight="200" MinWidth="250" MaxWidth="250">
     <Window.DataContext>
         <MyViewModel:CustomVM/>
     </Window.DataContext>
