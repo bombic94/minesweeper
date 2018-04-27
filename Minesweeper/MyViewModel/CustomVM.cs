@@ -20,18 +20,7 @@ namespace Minesweeper.MyViewModel
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private ICommand startCommand;
-        public ICommand StartCommand
-        {
-            get
-            {
-                return startCommand;
-            }
-            set
-            {
-                startCommand = value;
-            }
-        }
+        public ICommand StartCommand { get; set; }
 
         private int selectedHeight;
         public int SelectedHeight

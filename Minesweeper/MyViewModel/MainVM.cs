@@ -1,102 +1,38 @@
 ﻿using Minesweeper.MyView;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Minesweeper.MyViewModel
 {
-    class MainVM
+    class MainVM : INotifyPropertyChanged
     {
+        public int NumColumns { get; set; }
+        public int NumRows { get; set; }
         public int OblastID { get; set; }
-
+        public ObservableCollection<POLE> Pole { get; set; }
         public int RemainingMines { get; set; }
 
         public int Time { get; set; }
+        public ICommand StartGameCommand { get; set; }
+        public ICommand CustomGameCommand { get; set; }
+        public ICommand ContinueGameCommand { get; set; }
+        public ICommand QuitGameCommand { get; set; }
+        public ICommand HowToCommand { get; set; }
+        public ICommand AboutCommand { get; set; }
 
-        private ICommand startGameCommand;
-        public ICommand StartGameCommand
-        {
-            get
-            {
-                return startGameCommand;
-            }
-            set
-            {
-                startGameCommand = value;
-            }
-        }
-
-        private ICommand customGameCommand;
-        public ICommand CustomGameCommand
-        {
-            get
-            {
-                return customGameCommand;
-            }
-            set
-            {
-                customGameCommand = value;
-            }
-        }
-
-        private ICommand continueGameCommand;
-        public ICommand ContinueGameCommand
-        {
-            get
-            {
-                return continueGameCommand;
-            }
-            set
-            {
-                continueGameCommand = value;
-            }
-        }
-
-        private ICommand quitGameCommand;
-        public ICommand QuitGameCommand
-        {
-            get
-            {
-                return quitGameCommand;
-            }
-            set
-            {
-                quitGameCommand = value;
-            }
-        }
-
-        private ICommand howToCommand;
-        public ICommand HowToCommand
-        {
-            get
-            {
-                return howToCommand;
-            }
-            set
-            {
-                howToCommand = value;
-            }
-        }
-
-        private ICommand aboutCommand;
-        public ICommand AboutCommand
-        {
-            get
-            {
-                return aboutCommand;
-            }
-            set
-            {
-                aboutCommand = value;
-            }
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public MainVM()
         {
+
             StartGameCommand = new RelayCommand(param => this.StartGame(param));
             CustomGameCommand = new RelayCommand(param => this.CustomGame());
             ContinueGameCommand = new RelayCommand(param => this.ContinueGame());
@@ -107,7 +43,7 @@ namespace Minesweeper.MyViewModel
 
         private void StartGame(object param)
         {
-            int obtiznostID = (int) param;
+            int obtiznostID = Convert.ToInt32(param);
             OblastID = DBHelper.AddGame(obtiznostID);
 
             this.generateGrid();
@@ -141,7 +77,29 @@ namespace Minesweeper.MyViewModel
 
         public void generateGrid()
         {
-            throw new NotImplementedException();
+            refreshGame();
         }
+
+        private void refreshGame()
+        {
+            var level = DBHelper.getLevelInfo(OblastID);
+            NumColumns = level.sirka;
+            NumRows = level.vyska;
+            List<POLE> listPoli = DBHelper.getListPoli(OblastID);
+            List<MINA> listMin = DBHelper.getListMin(OblastID);
+
+            Pole = new ObservableCollection<POLE>(
+                listPoli
+            );
+
+            OnPropertyChanged("Pole");
+            OnPropertyChanged("NumColumns");
+            OnPropertyChanged("NumRows");
+        }
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
     }
 }

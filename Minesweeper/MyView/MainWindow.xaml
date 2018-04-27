@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Minesweeper"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel" x:Class="Minesweeper.MainWindow"
         mc:Ignorable="d"
-        Title="Minesweeper" Height="400" Width="600" MinWidth="600" MinHeight="400">
+        Title="Minesweeper" SizeToContent="WidthAndHeight" Height="Auto" Width="Auto" MinWidth="250" MinHeight="310" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:MainVM/>
     </Window.DataContext>
@@ -15,8 +15,8 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Game">
                     <MenuItem Header="_Beginner" Command="{Binding Path=StartGameCommand}" CommandParameter="1"/>
-                    <MenuItem Header="_Advanced" Command="{Binding Path=StartGameCommand}" CommandParameter="1"/>
-                    <MenuItem Header="_Expert" Command="{Binding Path=StartGameCommand}" CommandParameter="1"/>
+                    <MenuItem Header="_Advanced" Command="{Binding Path=StartGameCommand}" CommandParameter="2"/>
+                    <MenuItem Header="_Expert" Command="{Binding Path=StartGameCommand}" CommandParameter="3"/>
                     <Separator />
                     <MenuItem Header="Custom" Command="{Binding Path=CustomGameCommand}"/>
                     <Separator />
@@ -32,7 +32,26 @@
         </DockPanel>
         <TextBlock Text="999" Foreground="Red" Background="Black" Height="30" Width="70" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10 30"/>
         <TextBlock Text="999" Foreground="Red" Background="Black" Height="30" Width="70" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10 30"/>
-        
-        <Grid x:Name="GameGrid" Background="LightGray" Margin="10,70,10,10"/>
+
+        <ItemsControl ItemsSource="{Binding Path=Pole, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="10 70 10 10">
+
+            <!-- This panel will be used to hold the items -->
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Rows="{Binding Path=NumRows, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                 Columns="{Binding Path=NumColumns, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <!-- Each item will be drawn using this template -->
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Content="{Binding sousedni_miny}" Width="24" Height="24" Background="DarkGray" 
+                            MouseLeftButtonDown="{Binding Path=ShowField}" MouseRightButtonUp="{Binding Path=MarkMine}"/>
+                </DataTemplate>
+                
+            </ItemsControl.ItemTemplate>
+            
+        </ItemsControl>
     </Grid>
 </Window>
