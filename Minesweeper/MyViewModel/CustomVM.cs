@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Minesweeper.MyView;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Minesweeper.MyViewModel
@@ -96,7 +98,12 @@ namespace Minesweeper.MyViewModel
         private void StartGame()
         {
             int obtiznostID = DBHelper.AddObtiznost(SelectedHeight, SelectedWidth, SelectedMine);
-            DBHelper.AddGame(obtiznostID);
+            int oblastID = DBHelper.AddGame(obtiznostID);
+            MainVM main = Application.Current.MainWindow.DataContext as MainVM;
+            main.OblastID = oblastID;
+            main.generateGrid();
+            Application.Current.Windows.OfType<CustomWindow>().First().Close();
+            
         }
 
         private void computeMines()
@@ -110,8 +117,7 @@ namespace Minesweeper.MyViewModel
         }
 
         protected void OnPropertyChanged(string name)
-        {
-            
+        {          
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }

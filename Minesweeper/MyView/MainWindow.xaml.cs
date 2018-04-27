@@ -28,7 +28,7 @@ namespace Minesweeper
 
         }
 
-        private void MenuItem_Start(object sender, RoutedEventArgs e)
+     /*   private void MenuItem_Start(object sender, RoutedEventArgs e)
         {
             MenuItem item = e.Source as MenuItem;
             int oblast_id = 0;
@@ -53,8 +53,8 @@ namespace Minesweeper
             createGrid(oblast_id);
             refreshGame(oblast_id);
 
-            Content = grid1;
-        }
+            GameGrid = grid1;
+        }*/
 
         private void createGrid(int oblast_id)
         {
@@ -88,35 +88,6 @@ namespace Minesweeper
                 Grid.SetRow(b, p.souradnice_y);
                 Grid.SetColumn(b, p.souradnice_x);
             }
-        }
-
-        private void MenuItem_Custom(object sender, RoutedEventArgs e)
-        {
-            CustomWindow cusWin = new CustomWindow();
-            cusWin.ShowDialog();
-        }
-
-        private void MenuItem_Continue(object sender, RoutedEventArgs e)
-        {
-            ContinueWindow conWin = new ContinueWindow();
-            conWin.ShowDialog();
-        }
-
-        private void MenuItem_Quit(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
-        private void MenuItem_HowTo(object sender, RoutedEventArgs e)
-        {
-            HowToWindow htWin = new HowToWindow();
-            htWin.ShowDialog();
-        }
-
-        private void MenuItem_About(object sender, RoutedEventArgs e)
-        {
-            AboutWindow abWin = new AboutWindow();
-            abWin.ShowDialog();
         }
     }
 }

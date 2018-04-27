@@ -1,10 +1,12 @@
-﻿using System;
+﻿using Minesweeper.MyView;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Minesweeper.MyViewModel
@@ -52,7 +54,13 @@ namespace Minesweeper.MyViewModel
         public void SelectGame(object param)
         {
             HRA hra = (HRA)param;
-            int oblast = (int) hra.oblast;
+            int oblastID = (int) hra.oblast;
+
+            MainVM main = Application.Current.MainWindow.DataContext as MainVM;
+            main.OblastID = oblastID;
+            main.generateGrid();
+            Application.Current.Windows.OfType<ContinueWindow>().First().Close();
+            
         }
     }
 }
