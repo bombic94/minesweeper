@@ -47,7 +47,9 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Button Content="{Binding sousedni_miny}" Width="24" Height="24" Background="DarkGray" 
-                            MouseLeftButtonDown="{Binding Path=ShowField}" MouseRightButtonUp="{Binding Path=MarkMine}"/>
+                            Command="{Binding ElementName=MyItems Path=}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                    </Button>
                 </DataTemplate>
                 
             </ItemsControl.ItemTemplate>

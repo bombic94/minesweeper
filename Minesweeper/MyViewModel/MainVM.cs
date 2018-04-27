@@ -28,17 +28,30 @@ namespace Minesweeper.MyViewModel
         public ICommand HowToCommand { get; set; }
         public ICommand AboutCommand { get; set; }
 
+        public ICommand ClickedButton { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainVM()
         {
-
+            ClickedButton = new RelayCommand(param => this.Move(param));
             StartGameCommand = new RelayCommand(param => this.StartGame(param));
             CustomGameCommand = new RelayCommand(param => this.CustomGame());
             ContinueGameCommand = new RelayCommand(param => this.ContinueGame());
             QuitGameCommand = new RelayCommand(param => this.QuitGame());
             HowToCommand = new RelayCommand(param => this.HowTo());
             AboutCommand = new RelayCommand(param => this.About());
+        }
+
+        private void Move(object param)
+        {
+            POLE p = param as POLE;
+            if (p.je_mina)
+            {
+
+            }
+            else if (p.odkryto){
+
+            }
         }
 
         private void StartGame(object param)
