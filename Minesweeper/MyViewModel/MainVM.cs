@@ -138,6 +138,8 @@ namespace Minesweeper.MyViewModel
             List<POLE> listPoli = DBHelper.getListPoli(OblastID);
             List<MINA> listMin = DBHelper.getListMin(OblastID);
 
+            RemainingMines = DBHelper.MaxMinesToMark(OblastID);
+
             foreach (MINA m in listMin)
             {
                 foreach (POLE p in listPoli)
@@ -152,7 +154,7 @@ namespace Minesweeper.MyViewModel
             Pole = new ObservableCollection<POLE>(
                 listPoli
             );
-
+            OnPropertyChanged("RemainingMines");
             OnPropertyChanged("Pole");
         }
         protected void OnPropertyChanged(string name)
