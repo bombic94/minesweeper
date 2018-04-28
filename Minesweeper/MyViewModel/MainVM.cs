@@ -28,12 +28,14 @@ namespace Minesweeper.MyViewModel
         public ICommand HowToCommand { get; set; }
         public ICommand AboutCommand { get; set; }
 
-        public ICommand ClickedButton { get; set; }
+        public ICommand LeftButton { get; set; }
+        public ICommand RightButton { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
 
         public MainVM()
         {
-            ClickedButton = new RelayCommand(param => this.Move(param));
+            LeftButton = new RelayCommand(param => this.ShowField(param));
+            RightButton = new RelayCommand(param => this.MarkUnmarkMine(param));
             StartGameCommand = new RelayCommand(param => this.StartGame(param));
             CustomGameCommand = new RelayCommand(param => this.CustomGame());
             ContinueGameCommand = new RelayCommand(param => this.ContinueGame());
@@ -42,17 +44,46 @@ namespace Minesweeper.MyViewModel
             AboutCommand = new RelayCommand(param => this.About());
         }
 
-        private void Move(object param)
+        private void MarkUnmarkMine(object param)
         {
             Button b = param as Button;
             POLE p = b.DataContext as POLE;
 
-            if (p.je_mina)
+            if (p.flag == false)
             {
-
+                DBHelper.MarkMine(OblastID, p.souradnice_x, p.souradnice_y);
+                p.flag = true;
             }
-            else if (p.odkryto){
+            else
+            {
+                DBHelper.UnmarkMine(OblastID, p.souradnice_x, p.souradnice_y);
+                p.flag = false;
+            }
+            refreshGame();
+        }
 
+        private void ShowField(object param)
+        {
+            Button b = param as Button;
+            POLE p = b.DataContext as POLE;
+
+            DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
+
+            int endOfGame = DBHelper.CheckEndOfGame(OblastID);
+            if (endOfGame != 1)
+            {
+                if (endOfGame == 2)
+                {
+                    //vyhra
+                }
+                else if (endOfGame == 3)
+                {
+                    //prohra
+                }
+            }
+            else
+            {
+                refreshGame();
             }
         }
 
@@ -63,6 +94,7 @@ namespace Minesweeper.MyViewModel
 
             this.generateGrid();
         }
+
         private void CustomGame()
         {
             CustomWindow cusWin = new CustomWindow();
@@ -92,24 +124,36 @@ namespace Minesweeper.MyViewModel
 
         public void generateGrid()
         {
+            var level = DBHelper.getLevelInfo(OblastID);
+            NumColumns = level.sirka;
+            NumRows = level.vyska;
+            OnPropertyChanged("NumColumns");
+            OnPropertyChanged("NumRows");
+
             refreshGame();
         }
 
         private void refreshGame()
-        {
-            var level = DBHelper.getLevelInfo(OblastID);
-            NumColumns = level.sirka;
-            NumRows = level.vyska;
+        {          
             List<POLE> listPoli = DBHelper.getListPoli(OblastID);
             List<MINA> listMin = DBHelper.getListMin(OblastID);
+
+            foreach (MINA m in listMin)
+            {
+                foreach (POLE p in listPoli)
+                {
+                    if (m.souradnice_x == p.souradnice_x && m.souradnice_y == p.souradnice_y)
+                    {
+                        p.flag = true;
+                    }
+                }
+            }
 
             Pole = new ObservableCollection<POLE>(
                 listPoli
             );
 
             OnPropertyChanged("Pole");
-            OnPropertyChanged("NumColumns");
-            OnPropertyChanged("NumRows");
         }
         protected void OnPropertyChanged(string name)
         {

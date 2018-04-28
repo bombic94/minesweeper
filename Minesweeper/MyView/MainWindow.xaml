@@ -6,11 +6,13 @@
         xmlns:local="clr-namespace:Minesweeper"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel" x:Class="Minesweeper.MainWindow"
         mc:Ignorable="d"
-        Title="Minesweeper" SizeToContent="WidthAndHeight" Height="Auto" Width="Auto" MinWidth="250" MinHeight="310" ResizeMode="NoResize">
+        Title="Minesweeper" SizeToContent="WidthAndHeight" Height="Auto" Width="Auto" MinWidth="250" MinHeight="310" >
     <Window.DataContext>
         <MyViewModel:MainVM/>
     </Window.DataContext>
+    
     <Grid>
+        
         <DockPanel VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="20">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_Game">
@@ -35,6 +37,11 @@
 
         <ItemsControl x:Name="Pole" ItemsSource="{Binding Path=Pole, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Margin="10 70 10 10">
 
+            <ItemsControl.Resources>
+                <BitmapImage x:Key="flag-bitmap-img" UriSource="/images/flag.png"/>
+                <Image x:Key="flag-img" x:Shared="false" Source="{StaticResource flag-bitmap-img}"/>
+            </ItemsControl.Resources>
+            
             <!-- This panel will be used to hold the items -->
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -46,14 +53,33 @@
             <!-- Each item will be drawn using this template -->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Content="{Binding sousedni_miny}" Width="24" Height="24" Background="DarkGray" 
-                            Command="{Binding ElementName=Pole, Path=DataContext.ClickedButton}"
-                            CommandParameter="{Binding RelativeSource={RelativeSource Self}}">
+                    <Button Name="btn" Width="24" Height="24" Background="DarkGray" FontSize="14" FontWeight="Bold">
+                        <Button.InputBindings>
+                            <MouseBinding Gesture="LeftClick" Command="{Binding ElementName=Pole, Path=DataContext.LeftButton}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
+                            <MouseBinding Gesture="RightClick" Command="{Binding ElementName=Pole, Path=DataContext.RightButton}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
+                        </Button.InputBindings>
                     </Button>
+                    <DataTemplate.Triggers>
+                        <DataTrigger Binding="{Binding Path=odkryto}" Value="True">
+                            <Setter TargetName="btn" Property="IsEnabled"  Value="False"/>
+                            <Setter TargetName="btn" Property="Content" Value="{Binding sousedni_miny}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="0">
+                            <Setter TargetName="btn" Property="Content" Value=""/>
+                        </DataTrigger>
+
+                        <DataTrigger Binding="{Binding Path=flag}" Value="true">
+                            <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=flag-img}">
+
+                               
+                            </Setter>
+                        </DataTrigger>
+
+                    </DataTemplate.Triggers>
                 </DataTemplate>
-                
             </ItemsControl.ItemTemplate>
-            
         </ItemsControl>
     </Grid>
 </Window>

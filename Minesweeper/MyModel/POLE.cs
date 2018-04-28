@@ -21,5 +21,7 @@ namespace Minesweeper
                 .ToString();
             return result;
         }
+
+        public bool flag { get; set; }
     }
 }
