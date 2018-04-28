@@ -74,7 +74,10 @@ namespace Minesweeper.MyViewModel
             {
                 if (endOfGame == 2)
                 {
-                    //vyhra
+                    refreshGame();
+                    GameOverWindow goWin = new GameOverWindow();
+                    goWin.ShowDialog();
+                    
                 }
                 else if (endOfGame == 3)
                 {
