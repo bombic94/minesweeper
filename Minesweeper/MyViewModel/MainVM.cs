@@ -44,7 +44,9 @@ namespace Minesweeper.MyViewModel
 
         private void Move(object param)
         {
-            POLE p = param as POLE;
+            Button b = param as Button;
+            POLE p = b.DataContext as POLE;
+
             if (p.je_mina)
             {
 

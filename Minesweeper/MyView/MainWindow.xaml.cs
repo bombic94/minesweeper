@@ -24,7 +24,6 @@ namespace Minesweeper
         public MainWindow()
         {
             InitializeComponent();
-
         }
     }
 }
