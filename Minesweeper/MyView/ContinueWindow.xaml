@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel"
         mc:Ignorable="d"
-        Title="Continue game" Height="450" Width="450">
+        Title="Continue game" Height="450" Width="450" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:ContinueVM/>
     </Window.DataContext>

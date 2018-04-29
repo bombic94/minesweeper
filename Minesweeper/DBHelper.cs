@@ -297,7 +297,7 @@ namespace Minesweeper
                 int id = db.OBTIZNOST.Count() + 1;
                 var obtiznost = new OBTIZNOST
                 {
-                    nazev = "custom",
+                    nazev = "custom" + id,
                     omezeni = 1,
                     vyska = selectedHeight,
                     sirka = selectedWidth,

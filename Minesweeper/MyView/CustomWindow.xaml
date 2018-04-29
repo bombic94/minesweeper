@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel"
         mc:Ignorable="d"
-        Title="Custom game level" Height="200" Width="250" MinHeight="200" MaxHeight="200" MinWidth="250" MaxWidth="250">
+        Title="Custom game level" Height="200" Width="250" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:CustomVM/>
     </Window.DataContext>
@@ -21,8 +21,7 @@
                 Margin="100,119,22,10" 
                 Content="Start" 
                 IsEnabled="True" 
-                Command="{Binding Path=StartCommand}" 
-                CommandParameter="{Binding ElementName=lst, Path=SelectedItem}">
+                Command="{Binding Path=StartCommand}">
         </Button>
     </Grid>
 </Window>
