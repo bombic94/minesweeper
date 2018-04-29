@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,39 +13,35 @@ namespace Minesweeper.MyViewModel
     /// </summary>
     class HowToVM
     {
-        public String StartGame
-        { get
-            {
-                return "To start a new game select difficulty (Beginner, Advanced, Expert), or create custom difficulty.";
-            }
-        }
-        public String ContinueGame
-        {
-            get
-            {
-                return "To continue started game click on 'Continue' and select game from the list";
-            }
-        }
-        public String Play
-        {
-            get
-            {
-                return "To show field click on empty field with left mouse-button. To mark mine click on empty field with right mouse-button. "
-                + "To unmark mine click on marked mine with right mouse-button.";
-            }
-        }
-        public String ToWin
-        {
-            get
-            {
-                return "To win this game you must not 'step' on any mine and show all unmined fields.";
-            }
-        }
+        /// <summary>
+        /// How to start game
+        /// </summary>
+        public String StartGame { get; set; }
 
+        /// <summary>
+        /// How to continue started game
+        /// </summary>
+        public String ContinueGame { get; set; }
+
+        /// <summary>
+        /// How to play game
+        /// </summary>
+        public String Play { get; set; }
+
+        /// <summary>
+        /// Goal of game
+        /// </summary>
+        public String ToWin { get; set; }
+
+        /// <summary>
+        /// Read values from config file app.config
+        /// </summary>
         public HowToVM()
         {
-
+            StartGame = ConfigurationManager.AppSettings["howto.start"];
+            ContinueGame = ConfigurationManager.AppSettings["howto.continue"];
+            Play = ConfigurationManager.AppSettings["howto.play"];
+            ToWin = ConfigurationManager.AppSettings["howto.win"];
         }
-
     }
 }

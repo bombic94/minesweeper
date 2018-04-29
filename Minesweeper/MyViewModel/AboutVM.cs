@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,56 +13,29 @@ namespace Minesweeper.MyViewModel
     /// </summary>
     class AboutVM
     {
-        public String Author1
-        {
-            get
-            {
-                return "Author";
-            }
-        }
-        public String Author2
-        {
-            get
-            {
-                return "David Bohmann";
-            }
-        }
+        /// <summary>
+        /// Info about author
+        /// </summary>
+        public String Author { get; set; }
+ 
+        /// <summary>
+        /// Year of creation
+        /// </summary>
+        public String Year { get; set; }
 
-        public String Year1
-        {
-            get
-            {
-                return "Year";
-            }
-        }
+        /// <summary>
+        /// Version of app
+        /// </summary>
+        public String Version { get; set; }
 
-        public String Year2
-        {
-            get
-            {
-                return "2018";
-            }
-        }
-
-        public String Version1
-        {
-            get
-            {
-                return "Version";
-            }
-        }
-
-        public String Version2
-        {
-            get
-            {
-                return "1.0.0";
-            }
-        }
-
+        /// <summary>
+        /// Read values from config file app.config
+        /// </summary>
         public AboutVM()
         {
-
+            Author = ConfigurationManager.AppSettings["about.author"];
+            Year = ConfigurationManager.AppSettings["about.year"];
+            Version = ConfigurationManager.AppSettings["about.version"];
         }
     }
 }

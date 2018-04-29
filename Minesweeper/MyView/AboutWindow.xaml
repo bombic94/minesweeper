@@ -11,11 +11,11 @@
         <MyViewModel:AboutVM/>
     </Window.DataContext>
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="{Binding Author1}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="{Binding Year1}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="20,60,0,0" TextWrapping="Wrap" Text="{Binding Version1}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,20,0,0" TextWrapping="Wrap" Text="{Binding Author2}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,40,0,0" TextWrapping="Wrap" Text="{Binding Year2}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,60,0,0" TextWrapping="Wrap" Text="{Binding Version2}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="Author" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="Year" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,60,0,0" TextWrapping="Wrap" Text="Version" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="100,20,0,0" TextWrapping="Wrap" Text="{Binding Author}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="100,40,0,0" TextWrapping="Wrap" Text="{Binding Year}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="100,60,0,0" TextWrapping="Wrap" Text="{Binding Version}" VerticalAlignment="Top"/>
     </Grid>
 </Window>

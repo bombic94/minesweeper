@@ -115,6 +115,7 @@ namespace Minesweeper.MyViewModel
         public ICommand StartGameCommand { get; set; }
         public ICommand CustomGameCommand { get; set; }
         public ICommand ContinueGameCommand { get; set; }
+        public ICommand ListGameCommand { get; set; }
         public ICommand QuitGameCommand { get; set; }
         public ICommand HowToCommand { get; set; }
         public ICommand AboutCommand { get; set; }
@@ -129,9 +130,54 @@ namespace Minesweeper.MyViewModel
             StartGameCommand = new RelayCommand(param => this.StartGame(param));
             CustomGameCommand = new RelayCommand(param => this.CustomGame());
             ContinueGameCommand = new RelayCommand(param => this.ContinueGame());
+            ListGameCommand = new RelayCommand(param => this.ListGames());
             QuitGameCommand = new RelayCommand(param => this.QuitGame());
             HowToCommand = new RelayCommand(param => this.HowTo());
             AboutCommand = new RelayCommand(param => this.About());
+        }
+
+        /// <summary>
+        /// Reaction to left click of button.
+        /// Show field on selected button and check from database, if game still continues.
+        /// If yes, refresh field.
+        /// If lost, call GameLost method
+        /// If won, call GameWon method
+        /// </summary>
+        /// <param name="param">Button representing one field in game</param>
+        private void ShowField(object param)
+        {
+            int gameState = (int)DBHelper.GetGame(OblastID).stav; //check if you can play
+            if (gameState == (int)DBHelper.State.Playing)
+            {
+                Button b = param as Button;
+                POLE p = b.DataContext as POLE;
+
+                DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
+
+                gameState = (int)DBHelper.GetGame(OblastID).stav; //check state after move
+                if (gameState != (int)DBHelper.State.Playing)
+                {
+                    Timer.Enabled = false; //stop counting time
+
+                    if (gameState == (int)DBHelper.State.Won)
+                    {
+                        RefreshGame();
+                        GameOverWindow goWin = new GameOverWindow();
+                        goWin.ShowDialog();
+
+                    }
+                    else if (gameState == (int)DBHelper.State.Lost)
+                    {
+                        GameLost(p);
+                        GameOverWindow goWin = new GameOverWindow();
+                        goWin.ShowDialog();
+                    }
+                }
+                else
+                {
+                    RefreshGame();
+                }
+            }
         }
 
         /// <summary>
@@ -161,52 +207,7 @@ namespace Minesweeper.MyViewModel
                 RefreshGame();
             }        
         }
-
-        /// <summary>
-        /// Reaction to left click of button.
-        /// Show field on selected button and check from database, if game still continues.
-        /// If yes, refresh field.
-        /// If lost, call GameLost method
-        /// If won, call GameWon method
-        /// </summary>
-        /// <param name="param">Button representing one field in game</param>
-        private void ShowField(object param)
-        {
-            int gameState = (int) DBHelper.GetGame(OblastID).stav; //check if you can play
-            if (gameState == (int) DBHelper.State.Playing)
-            {
-                Button b = param as Button;
-                POLE p = b.DataContext as POLE;
-
-                DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
-
-                gameState = (int) DBHelper.GetGame(OblastID).stav; //check state after move
-                if (gameState != (int)DBHelper.State.Playing)
-                {
-                    Timer.Enabled = false; //stop counting time
-
-                    if (gameState == (int) DBHelper.State.Won)
-                    {
-                        RefreshGame();
-                        GameOverWindow goWin = new GameOverWindow();
-                        goWin.ShowDialog();
-
-                    }
-                    else if (gameState == (int) DBHelper.State.Lost)
-                    {
-                        GameLost(p);
-                        GameOverWindow goWin = new GameOverWindow();
-                        goWin.ShowDialog();
-                    }
-                }
-                else
-                {
-                    RefreshGame();
-                }
-            }
-        }
             
-
         /// <summary>
         /// Start game with selected difficulty level
         /// </summary>
@@ -237,6 +238,14 @@ namespace Minesweeper.MyViewModel
             conWin.ShowDialog();
         }
 
+        /// <summary>
+        /// Show GameOverWindow containing list of played games
+        /// </summary>
+        private void ListGames()
+        {
+            GameOverWindow goWin = new GameOverWindow();
+            goWin.ShowDialog();
+        }
         /// <summary>
         /// Close window, end of program
         /// </summary>
@@ -282,16 +291,6 @@ namespace Minesweeper.MyViewModel
             RefreshGame();
         }
 
-        /// <summary>
-        /// Refresh Time information about game
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
-        private void OnTimedEvent(object source, ElapsedEventArgs e)
-        {
-            HRA Hra = DBHelper.GetGame(OblastID);
-            Time = Hra.Time;
-        }
         /// <summary>
         /// After each move in playing game refresh game field
         /// Based on data from tables POLE and MINA show marked mines
@@ -367,6 +366,17 @@ namespace Minesweeper.MyViewModel
                 }
             }
             Pole = new ObservableCollection<POLE>(listPoli);
+        }
+
+        /// <summary>
+        /// Refresh Time information about game
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            HRA Hra = DBHelper.GetGame(OblastID);
+            Time = Hra.Time;
         }
 
         /// <summary>

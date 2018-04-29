@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel" x:Class="Minesweeper.MyView.GameOverWindow"
         mc:Ignorable="d"
-        Title="Game Over" Height="600" Width="600">
+        Title="List of games" Height="600" Width="600">
     <Window.DataContext>
         <MyViewModel:GameOverVM/>
     </Window.DataContext>

@@ -95,20 +95,22 @@
         
         <DockPanel VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="20">
             <Menu DockPanel.Dock="Top">
-                <MenuItem Header="_Game">
-                    <MenuItem Header="_Beginner" Command="{Binding Path=StartGameCommand}" CommandParameter="1"/>
-                    <MenuItem Header="_Advanced" Command="{Binding Path=StartGameCommand}" CommandParameter="2"/>
-                    <MenuItem Header="_Expert" Command="{Binding Path=StartGameCommand}" CommandParameter="3"/>
+                <MenuItem Header="Game">
+                    <MenuItem Header="Beginner" Command="{Binding Path=StartGameCommand}" CommandParameter="1"/>
+                    <MenuItem Header="Advanced" Command="{Binding Path=StartGameCommand}" CommandParameter="2"/>
+                    <MenuItem Header="Expert" Command="{Binding Path=StartGameCommand}" CommandParameter="3"/>
                     <Separator />
                     <MenuItem Header="Custom" Command="{Binding Path=CustomGameCommand}"/>
                     <Separator />
-                    <MenuItem Header="_Continue" Command="{Binding Path=ContinueGameCommand}"/>
+                    <MenuItem Header="Continue" Command="{Binding Path=ContinueGameCommand}"/>
                     <Separator />
-                    <MenuItem Header="_Quit game" Command="{Binding Path=QuitGameCommand}"/>
+                    <MenuItem Header="List of games" Command="{Binding Path=ListGameCommand}"/>
+                    <Separator />
+                    <MenuItem Header="Quit game" Command="{Binding Path=QuitGameCommand}"/>
                 </MenuItem>
-                <MenuItem Header="_Help">
-                    <MenuItem Header="_How to play" Command="{Binding Path=HowToCommand}"/>
-                    <MenuItem Header="_About" Command="{Binding Path=AboutCommand}"/>
+                <MenuItem Header="Help">
+                    <MenuItem Header="How to play" Command="{Binding Path=HowToCommand}"/>
+                    <MenuItem Header="About" Command="{Binding Path=AboutCommand}"/>
                 </MenuItem>
             </Menu>
         </DockPanel>
