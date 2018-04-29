@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel"
         mc:Ignorable="d"
-        Title="Continue game" Height="450" Width="450" ResizeMode="NoResize">
+        Title="Continue game" Height="300" Width="600" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:ContinueVM/>
     </Window.DataContext>
@@ -22,24 +22,45 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn  Header="Level" Width="100">
+                    <GridViewColumn  Header="Level" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding OBLAST1.obtiznost}"></TextBlock>
+                                <TextBlock Text="{Binding OBLAST1.OBTIZNOST1.nazev}"></TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn  Header="Marked mines" Width="120">
+                    <GridViewColumn  Header="Height" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OBLAST1.OBTIZNOST1.vyska}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Width" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OBLAST1.OBTIZNOST1.sirka}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Mines" Width="60">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding OBLAST1.OBTIZNOST1.pocet_min}"></TextBlock>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn  Header="Marked mines" Width="100">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding pocet_oznacenych_min}"></TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn  Header="Time" Width="120">
+                    <GridViewColumn  Header="Time (s)" Width="120">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding time}"></TextBlock>
+                                <TextBlock Text="{Binding Time}"></TextBlock>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
@@ -47,7 +68,7 @@
             </ListView.View>
         </ListView>
         <Button x:Name="btn" 
-                Margin="300 375 10 10" 
+                Margin="450 225 10 10" 
                 Content="Select" 
                 IsEnabled="False" 
                 Command="{Binding Path=SelectCommand}" 
