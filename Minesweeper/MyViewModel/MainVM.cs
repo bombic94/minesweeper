@@ -19,15 +19,6 @@ namespace Minesweeper.MyViewModel
     /// </summary>
     class MainVM : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Number of columns in game
-        /// </summary>
-        public int NumColumns { get; set; }
-
-        /// <summary>
-        /// Number of rows in game
-        /// </summary>
-        public int NumRows { get; set; }
 
         /// <summary>
         /// ID of game
@@ -35,14 +26,72 @@ namespace Minesweeper.MyViewModel
         public int OblastID { get; set; }
 
         /// <summary>
+        /// Number of columns in game
+        /// </summary>
+        private int numColumns;
+        public int NumColumns
+        {
+            get
+            {
+                return numColumns;
+            }
+            set
+            {
+                numColumns = value;
+                OnPropertyChanged("NumColumns");
+            }
+        }
+
+        /// <summary>
+        /// Number of rows in game
+        /// </summary>
+        private int numRows;
+        public int NumRows
+        {
+            get
+            {
+                return numRows;
+            }
+            set
+            {
+                numRows = value;
+                OnPropertyChanged("numRows");
+            }
+        }
+
+        /// <summary>
         /// List of fields in game
         /// </summary>
-        public ObservableCollection<POLE> Pole { get; set; }
+        private ObservableCollection<POLE> pole;
+        public ObservableCollection<POLE> Pole
+        {
+            get
+            {
+                return pole;
+            }
+            set
+            {
+                pole = value;
+                OnPropertyChanged("Pole");
+            }
+        }
 
         /// <summary>
         /// Number of remaining mines to mark
         /// </summary>
-        public int RemainingMines { get; set; }
+        private int remainingMines;
+        public int RemainingMines
+        {
+            get
+            {
+                return remainingMines;
+            }
+            set
+            {
+                remainingMines = value;
+                OnPropertyChanged("remainingMines");
+            }
+        }
 
         /// <summary>
         /// Time of game
@@ -198,8 +247,6 @@ namespace Minesweeper.MyViewModel
             var level = DBHelper.getLevelInfo(OblastID);
             NumColumns = level.sirka;
             NumRows = level.vyska;
-            OnPropertyChanged("NumColumns");
-            OnPropertyChanged("NumRows");
 
             RefreshGame();
         }
@@ -216,9 +263,9 @@ namespace Minesweeper.MyViewModel
 
             RemainingMines = DBHelper.MaxMinesToMark(OblastID);
 
-            foreach (MINA m in listMin)
+            foreach (POLE p in listPoli)              
             {
-                foreach (POLE p in listPoli)
+                foreach (MINA m in listMin)
                 {
                     if (m.souradnice_x == p.souradnice_x && m.souradnice_y == p.souradnice_y)
                     {
@@ -226,13 +273,8 @@ namespace Minesweeper.MyViewModel
                     }
                 }
             }
-
-            Pole = new ObservableCollection<POLE>(
-                listPoli
-            );
-            OnPropertyChanged("RemainingMines");
-            OnPropertyChanged("Pole");
-        }
+            Pole = new ObservableCollection<POLE>(listPoli);
+         }
 
         /// <summary>
         /// When game is lost, show all unmarked mines and wrongly marked mines.
@@ -267,11 +309,7 @@ namespace Minesweeper.MyViewModel
                     p.WrongFlag = true;
                 }
             }
-
-            Pole = new ObservableCollection<POLE>(
-                listPoli
-            );           
-            OnPropertyChanged("Pole");
+            Pole = new ObservableCollection<POLE>(listPoli);
         }
 
         /// <summary>
@@ -287,11 +325,7 @@ namespace Minesweeper.MyViewModel
                     p.Flag = true;
                 }
             }
-
-            Pole = new ObservableCollection<POLE>(
-                listPoli
-            );
-            OnPropertyChanged("Pole");
+            Pole = new ObservableCollection<POLE>(listPoli);
         }
 
         /// <summary>
