@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 namespace Minesweeper.MyViewModel
 {
+    /// <summary>
+    /// ViewModel for AboutWindow
+    /// Contains information which will be shown in AboutWindow
+    /// </summary>
     class AboutVM
     {
-        public String author1
+        public String Author1
         {
             get
             {
                 return "Author";
             }
         }
-        public String author2
+        public String Author2
         {
             get
             {
@@ -23,7 +27,7 @@ namespace Minesweeper.MyViewModel
             }
         }
 
-        public String year1
+        public String Year1
         {
             get
             {
@@ -31,7 +35,7 @@ namespace Minesweeper.MyViewModel
             }
         }
 
-        public String year2
+        public String Year2
         {
             get
             {
@@ -39,7 +43,7 @@ namespace Minesweeper.MyViewModel
             }
         }
 
-        public String version1
+        public String Version1
         {
             get
             {
@@ -47,12 +51,17 @@ namespace Minesweeper.MyViewModel
             }
         }
 
-        public String version2
+        public String Version2
         {
             get
             {
                 return "1.0.0";
             }
+        }
+
+        public AboutVM()
+        {
+
         }
     }
 }

@@ -6,22 +6,26 @@ using System.Threading.Tasks;
 
 namespace Minesweeper.MyViewModel
 {
+    /// <summary>
+    /// ViewModel for HowToWindow
+    /// Contains information which will be shown in HowToWindow
+    /// </summary>
     class HowToVM
     {
-        public String startGame
+        public String StartGame
         { get
             {
                 return "To start a new game select difficulty (Beginner, Advanced, Expert), or create custom difficulty.";
             }
         }
-        public String continueGame
+        public String ContinueGame
         {
             get
             {
                 return "To continue started game click on 'Continue' and select game from the list";
             }
         }
-        public String play
+        public String Play
         {
             get
             {
@@ -29,7 +33,7 @@ namespace Minesweeper.MyViewModel
                 + "To unmark mine click on marked mine with right mouse-button.";
             }
         }
-        public String toWin
+        public String ToWin
         {
             get
             {

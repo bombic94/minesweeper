@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Minesweeper"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel" x:Class="Minesweeper.MainWindow"
         mc:Ignorable="d"
-        Title="Minesweeper" SizeToContent="WidthAndHeight" Height="Auto" Width="Auto" MinWidth="250" MinHeight="310" >
+        Title="Minesweeper" SizeToContent="WidthAndHeight" Height="Auto" Width="Auto" MinWidth="250" MinHeight="310" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:MainVM/>
     </Window.DataContext>

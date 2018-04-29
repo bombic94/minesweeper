@@ -6,16 +6,16 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel" x:Class="Minesweeper.MyView.AboutWindow"
         mc:Ignorable="d"
-        Title="About application" Height="120" Width="300" MinHeight="120" MaxHeight="120" MinWidth="300" MaxWidth="300">
+        Title="About application" Height="120" Width="300" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:AboutVM/>
     </Window.DataContext>
     <Grid>
-        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="{Binding author1}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="{Binding year1}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="20,60,0,0" TextWrapping="Wrap" Text="{Binding version1}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,20,0,0" TextWrapping="Wrap" Text="{Binding author2}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,40,0,0" TextWrapping="Wrap" Text="{Binding year2}" VerticalAlignment="Top"/>
-        <TextBlock HorizontalAlignment="Left" Margin="100,60,0,0" TextWrapping="Wrap" Text="{Binding version2}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,20,0,0" TextWrapping="Wrap" Text="{Binding Author1}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" Text="{Binding Year1}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,60,0,0" TextWrapping="Wrap" Text="{Binding Version1}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="100,20,0,0" TextWrapping="Wrap" Text="{Binding Author2}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="100,40,0,0" TextWrapping="Wrap" Text="{Binding Year2}" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="100,60,0,0" TextWrapping="Wrap" Text="{Binding Version2}" VerticalAlignment="Top"/>
     </Grid>
 </Window>

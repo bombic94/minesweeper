@@ -6,14 +6,14 @@
         xmlns:local="clr-namespace:Minesweeper.MyView"
         xmlns:MyViewModel="clr-namespace:Minesweeper.MyViewModel" x:Class="Minesweeper.MyView.HowToWindow"
         mc:Ignorable="d"
-        Title="How to play" Height="250" Width="300" MinHeight="250" MaxHeight="250" MinWidth="300" MaxWidth="300">
+        Title="How to play" Height="250" Width="300" ResizeMode="NoResize">
     <Window.DataContext>
         <MyViewModel:HowToVM/>
     </Window.DataContext>
     <Grid Height="205" VerticalAlignment="Top">
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding startGame}" VerticalAlignment="Top" Height="35" Width="270"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,50,0,0" TextWrapping="Wrap" Text="{Binding continueGame}" VerticalAlignment="Top" Height="35" Width="270"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,90,0,0" TextWrapping="Wrap" Text="{Binding play}" VerticalAlignment="Top" Height="70" Width="270"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,165,0,0" TextWrapping="Wrap" Text="{Binding toWin}" VerticalAlignment="Top" Height="35" Width="270"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="{Binding StartGame}" VerticalAlignment="Top" Height="35" Width="270"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,50,0,0" TextWrapping="Wrap" Text="{Binding ContinueGame}" VerticalAlignment="Top" Height="35" Width="270"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,90,0,0" TextWrapping="Wrap" Text="{Binding Play}" VerticalAlignment="Top" Height="70" Width="270"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,165,0,0" TextWrapping="Wrap" Text="{Binding ToWin}" VerticalAlignment="Top" Height="35" Width="270"/>
     </Grid>
 </Window>

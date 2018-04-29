@@ -181,6 +181,11 @@ namespace Minesweeper
             }
         }
 
+        /// <summary>
+        /// Get information about difficulty level (height, width, num of mines, etc.)
+        /// </summary>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
+        /// <returns>Difficulty level OBTIZNOST</returns>
         public static OBTIZNOST getLevelInfo(int obl_id)
         {
             using (var db = new postgresEntities())
@@ -247,31 +252,10 @@ namespace Minesweeper
         }
 
         /// <summary>
-        /// Get list of wrongly marked mines in lost game
-        /// </summary>
-        /// <param name="obl_id">ID of OBLAST of played game</param>
-        /// <returns>List of wrongly marked mines</returns>
-        public static List<POLE> falselyMarkedMines(int obl_id)
-        {
-            using (var db = new postgresEntities())
-            {
-                var wrongMines = (from p in db.POLE
-                                  join m in db.MINA on p.oblast equals m.oblast
-                                  where p.oblast == obl_id
-                                  where p.souradnice_x == m.souradnice_x
-                                  where p.souradnice_y == m.souradnice_y
-                                  where p.je_mina == false         
-                                  orderby p.souradnice_y, p.souradnice_x
-                                  select p).ToList();
-                return wrongMines;
-            }
-        }
-
-        /// <summary>
         /// Get list of lost games ordered by time of creation
         /// </summary>
         /// <returns>List of lost games ordered by creation time</returns>
-        public static List<HRA> lostGames()
+        public static List<HRA> LostGames()
         {
             using (var db = new postgresEntities())
             {
@@ -287,7 +271,7 @@ namespace Minesweeper
         /// Get list of won games ordered by time of creation
         /// </summary>
         /// <returns>List of lost games ordered by creation time</returns>
-        public static List<HRA> wonGames()
+        public static List<HRA> WonGames()
         {
             using (var db = new postgresEntities())
             {
@@ -299,6 +283,13 @@ namespace Minesweeper
             }
         }
 
+        /// <summary>
+        /// Add new Difficulty level for new game. Create level with custom height, width and num of mines
+        /// </summary>
+        /// <param name="selectedHeight">Custom height</param>
+        /// <param name="selectedWidth">Custom width</param>
+        /// <param name="selectedMine">Custom number of mines</param>
+        /// <returns>ID of newly created difficulty OBTIZNOST</returns>
         public static int AddObtiznost(int selectedHeight, int selectedWidth, int selectedMine)
         {
             using (var db = new postgresEntities())
@@ -326,6 +317,20 @@ namespace Minesweeper
                 {
                     return -1;
                 }
+            }
+        }
+
+        /// <summary>
+        /// Get info about restrictions OMEZENI for new difficulty level.
+        /// Contains info about min/max width, height, num.of mines, etc.
+        /// </summary>
+        /// <returns>Restriction OMEZENI</returns>
+        public static OMEZENI GetOmezeni()
+        {
+            using (var db = new postgresEntities())
+            {
+                var omezeni = db.OMEZENI.Single();
+                return omezeni;
             }
         }
     }

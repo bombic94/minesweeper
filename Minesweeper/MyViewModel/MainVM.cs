@@ -12,22 +12,49 @@ using System.Windows.Input;
 
 namespace Minesweeper.MyViewModel
 {
+    /// <summary>
+    /// ViewModel for MainWindow
+    /// Controls for every move - showing fields and marking mines
+    /// Takes care of drawing the game field
+    /// </summary>
     class MainVM : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Number of columns in game
+        /// </summary>
         public int NumColumns { get; set; }
+
+        /// <summary>
+        /// Number of rows in game
+        /// </summary>
         public int NumRows { get; set; }
+
+        /// <summary>
+        /// ID of game
+        /// </summary>
         public int OblastID { get; set; }
+
+        /// <summary>
+        /// List of fields in game
+        /// </summary>
         public ObservableCollection<POLE> Pole { get; set; }
+
+        /// <summary>
+        /// Number of remaining mines to mark
+        /// </summary>
         public int RemainingMines { get; set; }
 
+        /// <summary>
+        /// Time of game
+        /// </summary>
         public int Time { get; set; }
+
         public ICommand StartGameCommand { get; set; }
         public ICommand CustomGameCommand { get; set; }
         public ICommand ContinueGameCommand { get; set; }
         public ICommand QuitGameCommand { get; set; }
         public ICommand HowToCommand { get; set; }
         public ICommand AboutCommand { get; set; }
-
         public ICommand LeftButton { get; set; }
         public ICommand RightButton { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -44,6 +71,12 @@ namespace Minesweeper.MyViewModel
             AboutCommand = new RelayCommand(param => this.About());
         }
 
+        /// <summary>
+        /// Reaction to right click of button.
+        /// If is not marked, mark it as mine.
+        /// If marked, unmark mine.
+        /// </summary>
+        /// <param name="param">Button representing one field in game</param>
         private void MarkUnmarkMine(object param)
         {
             Button b = param as Button;
@@ -62,6 +95,14 @@ namespace Minesweeper.MyViewModel
             RefreshGame();
         }
 
+        /// <summary>
+        /// Reaction to left click of button.
+        /// Show field on selected button and check from database, if game still continues.
+        /// If yes, refresh field.
+        /// If lost, call GameLost method
+        /// If won, call GameWon method
+        /// </summary>
+        /// <param name="param">Button representing one field in game</param>
         private void ShowField(object param)
         {
             Button b = param as Button;
@@ -81,7 +122,7 @@ namespace Minesweeper.MyViewModel
                 }
                 else if (endOfGame == (int)DBHelper.State.Lost)
                 {
-                    ShowMines(p);
+                    GameLost(p);
                     GameOverWindow goWin = new GameOverWindow();
                     goWin.ShowDialog();
                 }
@@ -92,6 +133,10 @@ namespace Minesweeper.MyViewModel
             }
         }
 
+        /// <summary>
+        /// Start game with selected difficulty level
+        /// </summary>
+        /// <param name="param">Difficulty level</param>
         private void StartGame(object param)
         {
             int obtiznostID = Convert.ToInt32(param);
@@ -100,33 +145,54 @@ namespace Minesweeper.MyViewModel
             this.GenerateGrid();
         }
 
+        /// <summary>
+        /// Show CustomWindow to create custom difficulty level and start game
+        /// </summary>
         private void CustomGame()
         {
             CustomWindow cusWin = new CustomWindow();
             cusWin.ShowDialog();
         }
+
+        /// <summary>
+        /// Show ContinueWindow to select one of not finished games to play
+        /// </summary>
         private void ContinueGame()
         {
             ContinueWindow conWin = new ContinueWindow();
             conWin.ShowDialog();
         }
 
+        /// <summary>
+        /// Close window, end of program
+        /// </summary>
         private void QuitGame()
         {
             Application.Current.MainWindow.Close();
         }    
+
+        /// <summary>
+        /// Show HowToWindow with instructions to play
+        /// </summary>
         private void HowTo()
         {
             HowToWindow htWin = new HowToWindow();
             htWin.ShowDialog();
         }
+
+        /// <summary>
+        /// Show AboutWindow with info about program
+        /// </summary>
         private void About()
         {
             AboutWindow abWin = new AboutWindow();
             abWin.ShowDialog();
         }
 
-
+        /// <summary>
+        /// At start of game generate grid for selected game
+        /// Specifies number of rows and columns to draw
+        /// </summary>
         public void GenerateGrid()
         {
             var level = DBHelper.getLevelInfo(OblastID);
@@ -138,6 +204,11 @@ namespace Minesweeper.MyViewModel
             RefreshGame();
         }
 
+        /// <summary>
+        /// After each move in playing game refresh game field
+        /// Based on data from tables POLE and MINA show marked mines
+        /// Also updates info about remaining mines
+        /// </summary>
         private void RefreshGame()
         {          
             List<POLE> listPoli = DBHelper.getListPoli(OblastID);
@@ -162,12 +233,13 @@ namespace Minesweeper.MyViewModel
             OnPropertyChanged("RemainingMines");
             OnPropertyChanged("Pole");
         }
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
-        private void ShowMines(POLE clicked)
+        /// <summary>
+        /// When game is lost, show all unmarked mines and wrongly marked mines.
+        /// Show the field that contains mine which was stepped on as red mine
+        /// </summary>
+        /// <param name="clicked">Field which was stepped on - red mine</param>
+        private void GameLost(POLE clicked)
         {
             List<POLE> listPoli = DBHelper.getListPoli(OblastID);
             List<MINA> listMin = DBHelper.getListMin(OblastID);
@@ -198,9 +270,37 @@ namespace Minesweeper.MyViewModel
 
             Pole = new ObservableCollection<POLE>(
                 listPoli
-            );
-            
+            );           
             OnPropertyChanged("Pole");
+        }
+
+        /// <summary>
+        /// After game is won, show all mines that were not marked
+        /// </summary>
+        private void GameWon()
+        {
+            List<POLE> listPoli = DBHelper.getListPoli(OblastID);
+            foreach (POLE p in listPoli)
+            {
+                if (p.je_mina) //flag all remaining mines
+                {
+                    p.Flag = true;
+                }
+            }
+
+            Pole = new ObservableCollection<POLE>(
+                listPoli
+            );
+            OnPropertyChanged("Pole");
+        }
+
+        /// <summary>
+        /// OnPropertyChange handling
+        /// </summary>
+        /// <param name="name">Property to change</param>
+        protected void OnPropertyChanged(string name)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
     }
 }
