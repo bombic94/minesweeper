@@ -47,7 +47,7 @@ namespace Minesweeper.MyViewModel
         protected void Refresh()
         {
             Hry = new ObservableCollection<HRA>(
-                DBHelper.getListOfRunnningGames()
+                DBHelper.GetListOfRunnningGames()
             );
         }
 

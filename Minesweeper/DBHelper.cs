@@ -21,26 +21,6 @@ namespace Minesweeper
         public enum State { Playing=1, Won=2, Lost=3 }
 
         /// <summary>
-        /// Method for obtaining list of games, which have not been finished
-        /// </summary>
-        /// <returns>List of IDs of non-finished games</returns>
-        public static List<HRA> getListOfRunnningGames()
-        {
-            List<int> runningGames = new List<int>();
-            using (var db = new postgresEntities())
-            {
-                var results = db.HRA
-                    .Where(h => h.stav == (int)State.Playing)
-                    .Include(h => h.OBLAST1)
-                    .Include(h => h.OBLAST1.OBTIZNOST1)
-                    .OrderBy(h => h.hra_id)
-                    .ToList();
-
-                return results;
-            }
-        }
-
-        /// <summary>
         /// Create new OBLAST with selected level of game (OBTIZNOST)
         /// </summary>
         /// <param name="obt">
@@ -70,6 +50,7 @@ namespace Minesweeper
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.InnerException.InnerException.Message);
                     return -1;
                 }
             }
@@ -166,11 +147,31 @@ namespace Minesweeper
         }
 
         /// <summary>
+        /// Method for obtaining list of games, which have not been finished
+        /// </summary>
+        /// <returns>List of IDs of non-finished games</returns>
+        public static List<HRA> GetListOfRunnningGames()
+        {
+            List<int> runningGames = new List<int>();
+            using (var db = new postgresEntities())
+            {
+                var results = db.HRA
+                    .Where(h => h.stav == (int)State.Playing)
+                    .Include(h => h.OBLAST1)
+                    .Include(h => h.OBLAST1.OBTIZNOST1)
+                    .OrderBy(h => h.hra_id)
+                    .ToList();
+
+                return results;
+            }
+        }
+
+        /// <summary>
         /// Get information about difficulty level (height, width, num of mines, etc.)
         /// </summary>
         /// <param name="obl_id">ID of OBLAST of played game</param>
         /// <returns>Difficulty level OBTIZNOST</returns>
-        public static OBTIZNOST getLevelInfo(int obl_id)
+        public static OBTIZNOST GetLevelInfo(int obl_id)
         {
             using (var db = new postgresEntities())
             {
@@ -188,7 +189,7 @@ namespace Minesweeper
         /// </summary>
         /// <param name="obl_id">ID of OBLAST of played game<</param>
         /// <returns>Ordered list of fields in played game</returns>
-        public static List<POLE> getListPoli(int obl_id)
+        public static List<POLE> GetListPoli(int obl_id)
         {
             using (var db = new postgresEntities())
             {
@@ -206,7 +207,7 @@ namespace Minesweeper
         /// </summary>
         /// <param name="obl_id">ID of OBLAST of played game</param>
         /// <returns>List of mines in played game</returns>
-        public static List<MINA> getListMin(int obl_id)
+        public static List<MINA> GetListMin(int obl_id)
         {
             using (var db = new postgresEntities())
             {
@@ -309,6 +310,7 @@ namespace Minesweeper
                 }
                 catch (Exception e)
                 {
+                    Console.WriteLine(e.InnerException.InnerException.Message);
                     return -1;
                 }
             }

@@ -279,7 +279,7 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         public void GenerateGrid()
         {
-            var level = DBHelper.getLevelInfo(OblastID);
+            var level = DBHelper.GetLevelInfo(OblastID);
             NumColumns = level.sirka;
             NumRows = level.vyska;
             
@@ -298,8 +298,8 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void RefreshGame()
         {          
-            List<POLE> listPoli = DBHelper.getListPoli(OblastID);
-            List<MINA> listMin = DBHelper.getListMin(OblastID);
+            List<POLE> listPoli = DBHelper.GetListPoli(OblastID);
+            List<MINA> listMin = DBHelper.GetListMin(OblastID);
 
             RemainingMines = DBHelper.MaxMinesToMark(OblastID);                    
 
@@ -323,8 +323,8 @@ namespace Minesweeper.MyViewModel
         /// <param name="clicked">Field which was stepped on - red mine</param>
         private void GameLost(POLE clicked)
         {
-            List<POLE> listPoli = DBHelper.getListPoli(OblastID);
-            List<MINA> listMin = DBHelper.getListMin(OblastID);
+            List<POLE> listPoli = DBHelper.GetListPoli(OblastID);
+            List<MINA> listMin = DBHelper.GetListMin(OblastID);
 
             foreach (POLE p in listPoli)
             {
@@ -357,7 +357,7 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void GameWon()
         {
-            List<POLE> listPoli = DBHelper.getListPoli(OblastID);
+            List<POLE> listPoli = DBHelper.GetListPoli(OblastID);
             foreach (POLE p in listPoli)
             {
                 if (p.je_mina) //flag all remaining mines
