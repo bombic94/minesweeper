@@ -10,7 +10,87 @@
     <Window.DataContext>
         <MyViewModel:MainVM/>
     </Window.DataContext>
-    
+    <Window.Resources>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="#FFBBBBBB"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FF999999"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF777777"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF707070"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <Style x:Key="ButtonStyle1" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="1">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Blue"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="2">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Green"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="3">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Red"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="4">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Purple"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="5">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Maroon"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="6">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Turquoise"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="7">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Black"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="8">
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="Gray"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         
         <DockPanel VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="20">
@@ -59,7 +139,7 @@
             <!-- Each item will be drawn using this template -->
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Button Name="btn" Width="24" Height="24" Background="DarkGray" FontSize="14" FontWeight="Bold">
+                    <Button Name="btn" Width="24" Height="24" Style="{StaticResource ButtonStyle1}">
                         <Button.InputBindings>
                             <MouseBinding Gesture="LeftClick" Command="{Binding ElementName=Pole, Path=DataContext.LeftButton}"
                             CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
@@ -75,7 +155,6 @@
                         <DataTrigger Binding="{Binding Path=sousedni_miny}" Value="0">
                             <Setter TargetName="btn" Property="Content" Value=""/>
                         </DataTrigger>
-
                         <DataTrigger Binding="{Binding Path=Flag}" Value="true">
                             <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=flag-img}"/>
                         </DataTrigger>

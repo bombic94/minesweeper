@@ -142,20 +142,24 @@ namespace Minesweeper.MyViewModel
         /// <param name="param">Button representing one field in game</param>
         private void MarkUnmarkMine(object param)
         {
-            Button b = param as Button;
-            POLE p = b.DataContext as POLE;
+            int gameState = (int)DBHelper.GetGame(OblastID).stav; //check if you can play
+            if (gameState == (int)DBHelper.State.Playing)
+            {
+                Button b = param as Button;
+                POLE p = b.DataContext as POLE;
 
-            if (p.Flag == false)
-            {
-                DBHelper.MarkMine(OblastID, p.souradnice_x, p.souradnice_y);
-                p.Flag = true;
-            }
-            else
-            {
-                DBHelper.UnmarkMine(OblastID, p.souradnice_x, p.souradnice_y);
-                p.Flag = false;
-            }
-            RefreshGame();
+                if (p.Flag == false)
+                {
+                    DBHelper.MarkMine(OblastID, p.souradnice_x, p.souradnice_y);
+                    p.Flag = true;
+                }
+                else
+                {
+                    DBHelper.UnmarkMine(OblastID, p.souradnice_x, p.souradnice_y);
+                    p.Flag = false;
+                }
+                RefreshGame();
+            }        
         }
 
         /// <summary>
@@ -168,35 +172,40 @@ namespace Minesweeper.MyViewModel
         /// <param name="param">Button representing one field in game</param>
         private void ShowField(object param)
         {
-            Button b = param as Button;
-            POLE p = b.DataContext as POLE;
-
-            DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
-
-            int endOfGame = DBHelper.CheckEndOfGame(OblastID);
-            if (endOfGame != (int) DBHelper.State.Playing)
+            int gameState = (int) DBHelper.GetGame(OblastID).stav; //check if you can play
+            if (gameState == (int) DBHelper.State.Playing)
             {
-                Timer.Enabled = false; //stop counting time
+                Button b = param as Button;
+                POLE p = b.DataContext as POLE;
 
-                if (endOfGame == (int)DBHelper.State.Won)
+                DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
+
+                gameState = (int) DBHelper.GetGame(OblastID).stav; //check state after move
+                if (gameState != (int)DBHelper.State.Playing)
+                {
+                    Timer.Enabled = false; //stop counting time
+
+                    if (gameState == (int) DBHelper.State.Won)
+                    {
+                        RefreshGame();
+                        GameOverWindow goWin = new GameOverWindow();
+                        goWin.ShowDialog();
+
+                    }
+                    else if (gameState == (int) DBHelper.State.Lost)
+                    {
+                        GameLost(p);
+                        GameOverWindow goWin = new GameOverWindow();
+                        goWin.ShowDialog();
+                    }
+                }
+                else
                 {
                     RefreshGame();
-                    GameOverWindow goWin = new GameOverWindow();
-                    goWin.ShowDialog();
-                    
                 }
-                else if (endOfGame == (int)DBHelper.State.Lost)
-                {
-                    GameLost(p);
-                    GameOverWindow goWin = new GameOverWindow();
-                    goWin.ShowDialog();
-                }
-            }
-            else
-            {
-                RefreshGame();
             }
         }
+            
 
         /// <summary>
         /// Start game with selected difficulty level

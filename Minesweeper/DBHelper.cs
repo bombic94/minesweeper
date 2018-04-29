@@ -166,23 +166,6 @@ namespace Minesweeper
         }
 
         /// <summary>
-        /// Check state of game (HRA) and return its value
-        /// </summary>
-        /// <param name="obl_id">ID of OBLAST of played game</param>
-        /// <returns>Value of game state</returns>
-        public static int CheckEndOfGame(int obl_id)
-        {
-            using (var db = new postgresEntities())
-            {
-                var stateOfGame = db.HRA
-                    .Where(h => h.oblast == obl_id)
-                    .Single().stav;
-
-                return (int)stateOfGame;
-            }
-        }
-
-        /// <summary>
         /// Get information about difficulty level (height, width, num of mines, etc.)
         /// </summary>
         /// <param name="obl_id">ID of OBLAST of played game</param>
@@ -368,6 +351,11 @@ namespace Minesweeper
             }
         }
 
+        /// <summary>
+        /// Get actual game HRA
+        /// </summary>
+        /// <param name="oblastID">ID of field OBLAST</param>
+        /// <returns>Game info HRA</returns>
         public static HRA GetGame(int oblastID)
         {
             using (var db = new postgresEntities())
