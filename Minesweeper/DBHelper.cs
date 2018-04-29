@@ -367,5 +367,17 @@ namespace Minesweeper
                 return found;
             }
         }
+
+        public static HRA GetGame(int oblastID)
+        {
+            using (var db = new postgresEntities())
+            {
+                var hra = db.HRA
+                    .Where(h => h.oblast == oblastID)
+                    .Single();
+
+                return hra;
+            }
+        }
     }
 }

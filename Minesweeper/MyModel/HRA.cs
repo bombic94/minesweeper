@@ -21,14 +21,19 @@ namespace Minesweeper
             return result;
         }
 
-        public double Time
+        public int Time
         {
             get
             {
                 if (cas_posledni_tah.HasValue && cas_prvni_tah.HasValue)
                 {
                     TimeSpan t = cas_posledni_tah.Value - cas_prvni_tah.Value;
-                    return Math.Round(t.TotalSeconds);
+
+                    if (this.stav == (int) DBHelper.State.Playing)
+                    {
+                        t = DateTimeOffset.Now - cas_prvni_tah.Value;
+                    }
+                    return (int) Math.Round(t.TotalSeconds);
                 }
                 return 0;
             }

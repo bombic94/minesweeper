@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -96,8 +97,21 @@ namespace Minesweeper.MyViewModel
         /// <summary>
         /// Time of game
         /// </summary>
-        public int Time { get; set; }
-
+        private int time;
+        public int Time
+        {
+            get
+            {
+                return time;
+            }
+            set
+            {
+                time = value;
+                OnPropertyChanged("time");
+            }
+        }
+        
+        public Timer Timer { get; set; }
         public ICommand StartGameCommand { get; set; }
         public ICommand CustomGameCommand { get; set; }
         public ICommand ContinueGameCommand { get; set; }
@@ -162,6 +176,8 @@ namespace Minesweeper.MyViewModel
             int endOfGame = DBHelper.CheckEndOfGame(OblastID);
             if (endOfGame != (int) DBHelper.State.Playing)
             {
+                Timer.Enabled = false; //stop counting time
+
                 if (endOfGame == (int)DBHelper.State.Won)
                 {
                     RefreshGame();
@@ -241,16 +257,32 @@ namespace Minesweeper.MyViewModel
         /// <summary>
         /// At start of game generate grid for selected game
         /// Specifies number of rows and columns to draw
+        /// Starts Timer which shows Time of game
         /// </summary>
         public void GenerateGrid()
         {
             var level = DBHelper.getLevelInfo(OblastID);
             NumColumns = level.sirka;
             NumRows = level.vyska;
+            
+            Timer = new Timer();
+            Timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
+            Timer.Interval = 500;
+            Timer.Enabled = true;
 
             RefreshGame();
         }
 
+        /// <summary>
+        /// Refresh Time information about game
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void OnTimedEvent(object source, ElapsedEventArgs e)
+        {
+            HRA Hra = DBHelper.GetGame(OblastID);
+            Time = Hra.Time;
+        }
         /// <summary>
         /// After each move in playing game refresh game field
         /// Based on data from tables POLE and MINA show marked mines
@@ -261,7 +293,7 @@ namespace Minesweeper.MyViewModel
             List<POLE> listPoli = DBHelper.getListPoli(OblastID);
             List<MINA> listMin = DBHelper.getListMin(OblastID);
 
-            RemainingMines = DBHelper.MaxMinesToMark(OblastID);
+            RemainingMines = DBHelper.MaxMinesToMark(OblastID);                    
 
             foreach (POLE p in listPoli)              
             {
