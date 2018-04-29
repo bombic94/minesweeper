@@ -58,7 +58,7 @@ namespace Minesweeper.MyViewModel
 
             MainVM main = Application.Current.MainWindow.DataContext as MainVM;
             main.OblastID = oblastID;
-            main.generateGrid();
+            main.GenerateGrid();
             Application.Current.Windows.OfType<ContinueWindow>().First().Close();
             
         }

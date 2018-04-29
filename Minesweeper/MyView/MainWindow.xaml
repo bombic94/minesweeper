@@ -40,6 +40,12 @@
             <ItemsControl.Resources>
                 <BitmapImage x:Key="flag-bitmap-img" UriSource="/images/flag.png"/>
                 <Image x:Key="flag-img" x:Shared="false" Source="{StaticResource flag-bitmap-img}"/>
+                <BitmapImage x:Key="mine-bitmap-img" UriSource="/images/mine.png"/>
+                <Image x:Key="mine-img" x:Shared="false" Source="{StaticResource mine-bitmap-img}"/>
+                <BitmapImage x:Key="wrong-mine-bitmap-img" UriSource="/images/wrongMine.png"/>
+                <Image x:Key="wrong-mine-img" x:Shared="false" Source="{StaticResource wrong-mine-bitmap-img}"/>
+                <BitmapImage x:Key="stepped-mine-bitmap-img" UriSource="/images/steppedMine.png"/>
+                <Image x:Key="stepped-mine-img" x:Shared="false" Source="{StaticResource stepped-mine-bitmap-img}"/>
             </ItemsControl.Resources>
             
             <!-- This panel will be used to hold the items -->
@@ -70,13 +76,18 @@
                             <Setter TargetName="btn" Property="Content" Value=""/>
                         </DataTrigger>
 
-                        <DataTrigger Binding="{Binding Path=flag}" Value="true">
-                            <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=flag-img}">
-
-                               
-                            </Setter>
+                        <DataTrigger Binding="{Binding Path=Flag}" Value="true">
+                            <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=flag-img}"/>
                         </DataTrigger>
-
+                        <DataTrigger Binding="{Binding Path=NotRevealed}" Value="true">
+                            <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=mine-img}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=WrongFlag}" Value="true">
+                            <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=wrong-mine-img}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Path=SteppedMine}" Value="true">
+                            <Setter TargetName="btn" Property="Content" Value="{StaticResource ResourceKey=stepped-mine-img}"/>
+                        </DataTrigger>
                     </DataTemplate.Triggers>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

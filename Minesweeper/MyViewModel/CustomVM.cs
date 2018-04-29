@@ -90,7 +90,7 @@ namespace Minesweeper.MyViewModel
             int oblastID = DBHelper.AddGame(obtiznostID);
             MainVM main = Application.Current.MainWindow.DataContext as MainVM;
             main.OblastID = oblastID;
-            main.generateGrid();
+            main.GenerateGrid();
             Application.Current.Windows.OfType<CustomWindow>().First().Close();
             
         }

@@ -22,6 +22,9 @@ namespace Minesweeper
             return result;
         }
 
-        public bool flag { get; set; }
+        public bool Flag { get; set; }
+        public bool WrongFlag { get; set; }
+        public bool NotRevealed { get; set; }
+        public bool SteppedMine { get; set; }
     }
 }

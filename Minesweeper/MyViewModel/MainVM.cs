@@ -49,17 +49,17 @@ namespace Minesweeper.MyViewModel
             Button b = param as Button;
             POLE p = b.DataContext as POLE;
 
-            if (p.flag == false)
+            if (p.Flag == false)
             {
                 DBHelper.MarkMine(OblastID, p.souradnice_x, p.souradnice_y);
-                p.flag = true;
+                p.Flag = true;
             }
             else
             {
                 DBHelper.UnmarkMine(OblastID, p.souradnice_x, p.souradnice_y);
-                p.flag = false;
+                p.Flag = false;
             }
-            refreshGame();
+            RefreshGame();
         }
 
         private void ShowField(object param)
@@ -70,23 +70,25 @@ namespace Minesweeper.MyViewModel
             DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
 
             int endOfGame = DBHelper.CheckEndOfGame(OblastID);
-            if (endOfGame != 1)
+            if (endOfGame != (int) DBHelper.State.Playing)
             {
-                if (endOfGame == 2)
+                if (endOfGame == (int)DBHelper.State.Won)
                 {
-                    refreshGame();
+                    RefreshGame();
                     GameOverWindow goWin = new GameOverWindow();
                     goWin.ShowDialog();
                     
                 }
-                else if (endOfGame == 3)
+                else if (endOfGame == (int)DBHelper.State.Lost)
                 {
-                    //prohra
+                    ShowMines(p);
+                    GameOverWindow goWin = new GameOverWindow();
+                    goWin.ShowDialog();
                 }
             }
             else
             {
-                refreshGame();
+                RefreshGame();
             }
         }
 
@@ -95,7 +97,7 @@ namespace Minesweeper.MyViewModel
             int obtiznostID = Convert.ToInt32(param);
             OblastID = DBHelper.AddGame(obtiznostID);
 
-            this.generateGrid();
+            this.GenerateGrid();
         }
 
         private void CustomGame()
@@ -125,7 +127,7 @@ namespace Minesweeper.MyViewModel
         }
 
 
-        public void generateGrid()
+        public void GenerateGrid()
         {
             var level = DBHelper.getLevelInfo(OblastID);
             NumColumns = level.sirka;
@@ -133,10 +135,10 @@ namespace Minesweeper.MyViewModel
             OnPropertyChanged("NumColumns");
             OnPropertyChanged("NumRows");
 
-            refreshGame();
+            RefreshGame();
         }
 
-        private void refreshGame()
+        private void RefreshGame()
         {          
             List<POLE> listPoli = DBHelper.getListPoli(OblastID);
             List<MINA> listMin = DBHelper.getListMin(OblastID);
@@ -149,7 +151,7 @@ namespace Minesweeper.MyViewModel
                 {
                     if (m.souradnice_x == p.souradnice_x && m.souradnice_y == p.souradnice_y)
                     {
-                        p.flag = true;
+                        p.Flag = true;
                     }
                 }
             }
@@ -165,5 +167,40 @@ namespace Minesweeper.MyViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
+        private void ShowMines(POLE clicked)
+        {
+            List<POLE> listPoli = DBHelper.getListPoli(OblastID);
+            List<MINA> listMin = DBHelper.getListMin(OblastID);
+
+            foreach (POLE p in listPoli)
+            {
+                foreach (MINA m in listMin)
+                {  
+                    if (m.souradnice_x == p.souradnice_x && m.souradnice_y == p.souradnice_y)
+                    {
+                        p.Flag = true;
+                    }
+                }
+                if (p.souradnice_x == clicked.souradnice_x && p.souradnice_y == clicked.souradnice_y) //stepped on mine
+                {
+                    p.SteppedMine = true;
+                }
+                else if (p.je_mina == true && p.Flag == false) //unmarked mines
+                {
+                    p.NotRevealed = true;
+                }
+                else if (p.je_mina == false && p.Flag == true) //wrongly marked mines
+                {
+                    p.Flag = false;
+                    p.WrongFlag = true;
+                }
+            }
+
+            Pole = new ObservableCollection<POLE>(
+                listPoli
+            );
+            
+            OnPropertyChanged("Pole");
+        }
     }
 }
