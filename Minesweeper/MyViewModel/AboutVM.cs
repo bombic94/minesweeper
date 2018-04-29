@@ -11,31 +11,32 @@ namespace Minesweeper.MyViewModel
     /// ViewModel for AboutWindow
     /// Contains information which will be shown in AboutWindow
     /// </summary>
-    class AboutVM
+    public class AboutVM
     {
         /// <summary>
-        /// Info about author
-        /// </summary>
-        public String Author { get; set; }
- 
-        /// <summary>
-        /// Year of creation
-        /// </summary>
-        public String Year { get; set; }
-
-        /// <summary>
-        /// Version of app
-        /// </summary>
-        public String Version { get; set; }
-
-        /// <summary>
+        /// Initializes a new instance of the <see cref="AboutVM"/> class
         /// Read values from config file app.config
         /// </summary>
         public AboutVM()
         {
-            Author = ConfigurationManager.AppSettings["about.author"];
-            Year = ConfigurationManager.AppSettings["about.year"];
-            Version = ConfigurationManager.AppSettings["about.version"];
+            this.Author = ConfigurationManager.AppSettings["about.author"];
+            this.Year = ConfigurationManager.AppSettings["about.year"];
+            this.Version = ConfigurationManager.AppSettings["about.version"];
         }
+
+        /// <summary>
+        /// Gets or sets info about author
+        /// </summary>
+        public string Author { get; set; }
+
+        /// <summary>
+        /// Gets or sets year of creation
+        /// </summary>
+        public string Year { get; set; }
+
+        /// <summary>
+        /// Gets or sets version of app
+        /// </summary>
+        public string Version { get; set; }
     }
 }

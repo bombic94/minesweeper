@@ -6,25 +6,29 @@ using System.Threading.Tasks;
 
 namespace Minesweeper
 {
+    /// <summary>
+    /// Additional properties for Object POLE
+    /// </summary>
     public partial class POLE
     {
-        public override string ToString()
-        {
-            string result = new StringBuilder().Append("POLE: ")
-                .Append("ID - ").Append(this.pole_id)
-                .Append(", OblastID - ").Append(this.oblast)
-                .Append(", X - ").Append(this.souradnice_x)
-                .Append(", Y - ").Append(this.souradnice_y)
-                .Append(", Je mina - ").Append(this.je_mina)
-                .Append(", Odkryto - ").Append(this.odkryto)
-                .Append(", Sousedni miny - ").Append(this.sousedni_miny)
-                .ToString();
-            return result;
-        }
-
+        /// <summary>
+        /// Gets or sets a value indicating whether is the field marked as mine
+        /// </summary>
         public bool Flag { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is the field wrongly marked as mine
+        /// </summary>
         public bool WrongFlag { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is the field mine which was not marked
+        /// </summary>
         public bool NotRevealed { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether is the field mine which was stepped on
+        /// </summary>
         public bool SteppedMine { get; set; }
     }
 }

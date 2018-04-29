@@ -19,9 +19,12 @@ namespace Minesweeper.MyView
     /// </summary>
     public partial class GameOverWindow : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GameOverWindow" /> class
+        /// </summary>
         public GameOverWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

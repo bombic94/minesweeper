@@ -19,9 +19,12 @@ namespace Minesweeper.MyView
     /// </summary>
     public partial class CustomWindow : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomWindow" /> class
+        /// </summary>
         public CustomWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Minesweeper.MyView;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,6 +9,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Minesweeper.MyView;
 
 namespace Minesweeper.MyViewModel
 {
@@ -18,122 +18,221 @@ namespace Minesweeper.MyViewModel
     /// Controls for every move - showing fields and marking mines
     /// Takes care of drawing the game field
     /// </summary>
-    class MainVM : INotifyPropertyChanged
+    public class MainVM : INotifyPropertyChanged
     {
-
         /// <summary>
-        /// ID of game
-        /// </summary>
-        public int OblastID { get; set; }
-
-        /// <summary>
-        /// Number of columns in game
+        /// Number of columns
         /// </summary>
         private int numColumns;
-        public int NumColumns
-        {
-            get
-            {
-                return numColumns;
-            }
-            set
-            {
-                numColumns = value;
-                OnPropertyChanged("NumColumns");
-            }
-        }
 
         /// <summary>
-        /// Number of rows in game
+        /// Number of rows
         /// </summary>
         private int numRows;
-        public int NumRows
-        {
-            get
-            {
-                return numRows;
-            }
-            set
-            {
-                numRows = value;
-                OnPropertyChanged("numRows");
-            }
-        }
 
         /// <summary>
-        /// List of fields in game
+        /// List of fields
         /// </summary>
         private ObservableCollection<POLE> pole;
-        public ObservableCollection<POLE> Pole
-        {
-            get
-            {
-                return pole;
-            }
-            set
-            {
-                pole = value;
-                OnPropertyChanged("Pole");
-            }
-        }
 
         /// <summary>
         /// Number of remaining mines to mark
         /// </summary>
         private int remainingMines;
-        public int RemainingMines
+
+        /// <summary>
+        /// Time in seconds
+        /// </summary>
+        private int time;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainVM" /> class
+        /// Sets all commands to functions
+        /// </summary>
+        public MainVM()
+        {
+            this.LeftButton = new RelayCommand(param => this.ShowField(param));
+            this.RightButton = new RelayCommand(param => this.MarkUnmarkMine(param));
+            this.StartGameCommand = new RelayCommand(param => this.StartGame(param));
+            this.CustomGameCommand = new RelayCommand(param => this.CustomGame());
+            this.ContinueGameCommand = new RelayCommand(param => this.ContinueGame());
+            this.ListGameCommand = new RelayCommand(param => this.ListGames());
+            this.QuitGameCommand = new RelayCommand(param => this.QuitGame());
+            this.HowToCommand = new RelayCommand(param => this.HowTo());
+            this.AboutCommand = new RelayCommand(param => this.About());
+        }
+
+        /// <summary>
+        /// Property changed event handler
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        /// <summary>
+        /// Gets or sets ID of game
+        /// </summary>
+        public int OblastID { get; set; }
+
+        /// <summary>
+        /// Gets or sets number of columns in game
+        /// </summary> 
+        public int NumColumns
         {
             get
             {
-                return remainingMines;
+                return this.numColumns;
             }
+
             set
             {
-                remainingMines = value;
-                OnPropertyChanged("remainingMines");
+                this.numColumns = value;
+                this.OnPropertyChanged("NumColumns");
             }
         }
 
         /// <summary>
-        /// Time of game
+        /// Gets or sets number of rows in game
         /// </summary>
-        private int time;
+        public int NumRows
+        {
+            get
+            {
+                return this.numRows;
+            }
+
+            set
+            {
+                this.numRows = value;
+                this.OnPropertyChanged("numRows");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets list of fields in game
+        /// </summary>
+        public ObservableCollection<POLE> Pole
+        {
+            get
+            {
+                return this.pole;
+            }
+
+            set
+            {
+                this.pole = value;
+                this.OnPropertyChanged("Pole");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets number of remaining mines to mark
+        /// </summary>
+        public int RemainingMines
+        {
+            get
+            {
+                return this.remainingMines;
+            }
+
+            set
+            {
+                this.remainingMines = value;
+                this.OnPropertyChanged("remainingMines");
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets time of game
+        /// </summary>
         public int Time
         {
             get
             {
-                return time;
+                return this.time;
             }
+
             set
             {
-                time = value;
-                OnPropertyChanged("time");
+                this.time = value;
+                this.OnPropertyChanged("time");
             }
         }
         
+        /// <summary>
+        /// Gets or sets timer instance
+        /// </summary>
         public Timer Timer { get; set; }
-        public ICommand StartGameCommand { get; set; }
-        public ICommand CustomGameCommand { get; set; }
-        public ICommand ContinueGameCommand { get; set; }
-        public ICommand ListGameCommand { get; set; }
-        public ICommand QuitGameCommand { get; set; }
-        public ICommand HowToCommand { get; set; }
-        public ICommand AboutCommand { get; set; }
-        public ICommand LeftButton { get; set; }
-        public ICommand RightButton { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
 
-        public MainVM()
+        /// <summary>
+        /// Gets or sets Command to start game
+        /// </summary>
+        public ICommand StartGameCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets Command to create custom game
+        /// </summary>
+        public ICommand CustomGameCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets Command to continue game
+        /// </summary>
+        public ICommand ContinueGameCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets Command to list played games
+        /// </summary>
+        public ICommand ListGameCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets Command to quit game
+        /// </summary>
+        public ICommand QuitGameCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets Command to show howto
+        /// </summary>
+        public ICommand HowToCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets Command to show about
+        /// </summary>
+        public ICommand AboutCommand { get; set; }
+
+        /// <summary>
+        /// Gets or sets command for left click
+        /// </summary>
+        public ICommand LeftButton { get; set; }
+
+        /// <summary>
+        /// Gets or sets command for right click
+        /// </summary>
+        public ICommand RightButton { get; set; }
+
+        /// <summary>
+        /// At start of game generate grid for selected game
+        /// Specifies number of rows and columns to draw
+        /// Starts Timer which shows Time of game
+        /// </summary>
+        public void GenerateGrid()
         {
-            LeftButton = new RelayCommand(param => this.ShowField(param));
-            RightButton = new RelayCommand(param => this.MarkUnmarkMine(param));
-            StartGameCommand = new RelayCommand(param => this.StartGame(param));
-            CustomGameCommand = new RelayCommand(param => this.CustomGame());
-            ContinueGameCommand = new RelayCommand(param => this.ContinueGame());
-            ListGameCommand = new RelayCommand(param => this.ListGames());
-            QuitGameCommand = new RelayCommand(param => this.QuitGame());
-            HowToCommand = new RelayCommand(param => this.HowTo());
-            AboutCommand = new RelayCommand(param => this.About());
+            var level = DBHelper.GetLevelInfo(this.OblastID);
+            this.NumColumns = level.sirka;
+            this.NumRows = level.vyska;
+
+            this.Timer = new Timer();
+            this.Timer.Elapsed += new ElapsedEventHandler(this.OnTimedEvent);
+            this.Timer.Interval = 500;
+            this.Timer.Enabled = true;
+
+            this.RefreshGame();
+        }
+
+        /// <summary>
+        /// OnPropertyChange handling
+        /// </summary>
+        /// <param name="name">Property to change</param>
+        protected void OnPropertyChanged(string name)
+        {
+            this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
         /// <summary>
@@ -146,36 +245,35 @@ namespace Minesweeper.MyViewModel
         /// <param name="param">Button representing one field in game</param>
         private void ShowField(object param)
         {
-            int gameState = (int)DBHelper.GetGame(OblastID).stav; //check if you can play
+            int gameState = (int)DBHelper.GetGame(this.OblastID).stav; // check if you can play
             if (gameState == (int)DBHelper.State.Playing)
             {
                 Button b = param as Button;
                 POLE p = b.DataContext as POLE;
 
-                DBHelper.ShowField(OblastID, p.souradnice_x, p.souradnice_y);
+                DBHelper.ShowField(this.OblastID, p.souradnice_x, p.souradnice_y);
 
-                gameState = (int)DBHelper.GetGame(OblastID).stav; //check state after move
+                gameState = (int)DBHelper.GetGame(this.OblastID).stav; // check state after move
                 if (gameState != (int)DBHelper.State.Playing)
                 {
-                    Timer.Enabled = false; //stop counting time
+                    this.Timer.Enabled = false; // stop counting time
 
                     if (gameState == (int)DBHelper.State.Won)
                     {
-                        RefreshGame();
-                        GameOverWindow goWin = new GameOverWindow();
-                        goWin.ShowDialog();
-
+                        this.GameWon();
+                        GameOverWindow gameWin = new GameOverWindow();
+                        gameWin.ShowDialog();
                     }
                     else if (gameState == (int)DBHelper.State.Lost)
                     {
-                        GameLost(p);
-                        GameOverWindow goWin = new GameOverWindow();
-                        goWin.ShowDialog();
+                        this.GameLost(p);
+                        GameOverWindow gameWin = new GameOverWindow();
+                        gameWin.ShowDialog();
                     }
                 }
                 else
                 {
-                    RefreshGame();
+                    this.RefreshGame();
                 }
             }
         }
@@ -188,7 +286,7 @@ namespace Minesweeper.MyViewModel
         /// <param name="param">Button representing one field in game</param>
         private void MarkUnmarkMine(object param)
         {
-            int gameState = (int)DBHelper.GetGame(OblastID).stav; //check if you can play
+            int gameState = (int)DBHelper.GetGame(this.OblastID).stav; // check if you can play
             if (gameState == (int)DBHelper.State.Playing)
             {
                 Button b = param as Button;
@@ -196,15 +294,16 @@ namespace Minesweeper.MyViewModel
 
                 if (p.Flag == false)
                 {
-                    DBHelper.MarkMine(OblastID, p.souradnice_x, p.souradnice_y);
+                    DBHelper.MarkMine(this.OblastID, p.souradnice_x, p.souradnice_y);
                     p.Flag = true;
                 }
                 else
                 {
-                    DBHelper.UnmarkMine(OblastID, p.souradnice_x, p.souradnice_y);
+                    DBHelper.UnmarkMine(this.OblastID, p.souradnice_x, p.souradnice_y);
                     p.Flag = false;
                 }
-                RefreshGame();
+
+                this.RefreshGame();
             }        
         }
             
@@ -215,7 +314,7 @@ namespace Minesweeper.MyViewModel
         private void StartGame(object param)
         {
             int obtiznostID = Convert.ToInt32(param);
-            OblastID = DBHelper.AddGame(obtiznostID);
+            this.OblastID = DBHelper.AddGame(obtiznostID);
 
             this.GenerateGrid();
         }
@@ -243,9 +342,10 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void ListGames()
         {
-            GameOverWindow goWin = new GameOverWindow();
-            goWin.ShowDialog();
+            GameOverWindow gameWin = new GameOverWindow();
+            gameWin.ShowDialog();
         }
+
         /// <summary>
         /// Close window, end of program
         /// </summary>
@@ -259,8 +359,8 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void HowTo()
         {
-            HowToWindow htWin = new HowToWindow();
-            htWin.ShowDialog();
+            HowToWindow howWin = new HowToWindow();
+            howWin.ShowDialog();
         }
 
         /// <summary>
@@ -268,27 +368,8 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void About()
         {
-            AboutWindow abWin = new AboutWindow();
-            abWin.ShowDialog();
-        }
-
-        /// <summary>
-        /// At start of game generate grid for selected game
-        /// Specifies number of rows and columns to draw
-        /// Starts Timer which shows Time of game
-        /// </summary>
-        public void GenerateGrid()
-        {
-            var level = DBHelper.GetLevelInfo(OblastID);
-            NumColumns = level.sirka;
-            NumRows = level.vyska;
-            
-            Timer = new Timer();
-            Timer.Elapsed += new ElapsedEventHandler(OnTimedEvent);
-            Timer.Interval = 500;
-            Timer.Enabled = true;
-
-            RefreshGame();
+            AboutWindow aboutWin = new AboutWindow();
+            aboutWin.ShowDialog();
         }
 
         /// <summary>
@@ -298,10 +379,10 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void RefreshGame()
         {          
-            List<POLE> listPoli = DBHelper.GetListPoli(OblastID);
-            List<MINA> listMin = DBHelper.GetListMin(OblastID);
+            List<POLE> listPoli = DBHelper.GetListPoli(this.OblastID);
+            List<MINA> listMin = DBHelper.GetListMin(this.OblastID);
 
-            RemainingMines = DBHelper.MaxMinesToMark(OblastID);                    
+            this.RemainingMines = DBHelper.MaxMinesToMark(this.OblastID);                    
 
             foreach (POLE p in listPoli)              
             {
@@ -313,7 +394,8 @@ namespace Minesweeper.MyViewModel
                     }
                 }
             }
-            Pole = new ObservableCollection<POLE>(listPoli);
+
+            this.Pole = new ObservableCollection<POLE>(listPoli);
          }
 
         /// <summary>
@@ -323,8 +405,8 @@ namespace Minesweeper.MyViewModel
         /// <param name="clicked">Field which was stepped on - red mine</param>
         private void GameLost(POLE clicked)
         {
-            List<POLE> listPoli = DBHelper.GetListPoli(OblastID);
-            List<MINA> listMin = DBHelper.GetListMin(OblastID);
+            List<POLE> listPoli = DBHelper.GetListPoli(this.OblastID);
+            List<MINA> listMin = DBHelper.GetListMin(this.OblastID);
 
             foreach (POLE p in listPoli)
             {
@@ -335,21 +417,23 @@ namespace Minesweeper.MyViewModel
                         p.Flag = true;
                     }
                 }
-                if (p.souradnice_x == clicked.souradnice_x && p.souradnice_y == clicked.souradnice_y) //stepped on mine
+
+                if (p.souradnice_x == clicked.souradnice_x && p.souradnice_y == clicked.souradnice_y)
                 {
                     p.SteppedMine = true;
                 }
-                else if (p.je_mina == true && p.Flag == false) //unmarked mines
+                else if (p.je_mina == true && p.Flag == false)
                 {
                     p.NotRevealed = true;
                 }
-                else if (p.je_mina == false && p.Flag == true) //wrongly marked mines
+                else if (p.je_mina == false && p.Flag == true)
                 {
                     p.Flag = false;
                     p.WrongFlag = true;
                 }
             }
-            Pole = new ObservableCollection<POLE>(listPoli);
+
+            this.Pole = new ObservableCollection<POLE>(listPoli);
         }
 
         /// <summary>
@@ -357,35 +441,27 @@ namespace Minesweeper.MyViewModel
         /// </summary>
         private void GameWon()
         {
-            List<POLE> listPoli = DBHelper.GetListPoli(OblastID);
+            List<POLE> listPoli = DBHelper.GetListPoli(this.OblastID);
             foreach (POLE p in listPoli)
             {
-                if (p.je_mina) //flag all remaining mines
+                if (p.je_mina)
                 {
                     p.Flag = true;
                 }
             }
-            Pole = new ObservableCollection<POLE>(listPoli);
+
+            this.Pole = new ObservableCollection<POLE>(listPoli);
         }
 
         /// <summary>
         /// Refresh Time information about game
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
+        /// <param name="source">Source of event</param>
+        /// <param name="e">Param of event</param>
         private void OnTimedEvent(object source, ElapsedEventArgs e)
         {
-            HRA Hra = DBHelper.GetGame(OblastID);
-            Time = Hra.Time;
-        }
-
-        /// <summary>
-        /// OnPropertyChange handling
-        /// </summary>
-        /// <param name="name">Property to change</param>
-        protected void OnPropertyChanged(string name)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            HRA hra = DBHelper.GetGame(this.OblastID);
+            this.Time = hra.Time;
         }
     }
 }

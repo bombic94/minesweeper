@@ -8,39 +8,45 @@ using System.Threading.Tasks;
 
 namespace Minesweeper.MyViewModel
 {
+    /// <summary>
+    /// ViewModel for GameOVerWindow
+    /// Shows lists of won and lost games
+    /// </summary>
     public class GameOverVM
     {
         /// <summary>
-        /// Collection of lost games
+        /// Initializes a new instance of the <see cref="GameOverVM" /> class
         /// </summary>
-        public ObservableCollection<HRA> LostGames { get; set; }
-
-        /// <summary>
-        /// Collection of won games
-        /// </summary>
-        public ObservableCollection<HRA> WonGames { get; set; }
-
         public GameOverVM()
         {
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
-                LostGames = new ObservableCollection<HRA>();
-                WonGames = new ObservableCollection<HRA>();
+                this.LostGames = new ObservableCollection<HRA>();
+                this.WonGames = new ObservableCollection<HRA>();
             }
             else
             {
-                Refresh();
+                this.Refresh();
             }
         }
 
+        /// <summary>
+        /// Gets or sets collection of lost games
+        /// </summary>
+        public ObservableCollection<HRA> LostGames { get; set; }
+
+        /// <summary>
+        /// Gets or sets collection of won games
+        /// </summary>
+        public ObservableCollection<HRA> WonGames { get; set; }
+
+        /// <summary>
+        /// Set lists of won and lost games with data from DB
+        /// </summary>
         private void Refresh()
         {
-            LostGames = new ObservableCollection<HRA>(
-                DBHelper.LostGames()
-            );
-            WonGames = new ObservableCollection<HRA>(
-                DBHelper.WonGames()
-            );
+            this.LostGames = new ObservableCollection<HRA>(DBHelper.LostGames());
+            this.WonGames = new ObservableCollection<HRA>(DBHelper.WonGames());
         }
     }
 }

@@ -6,44 +6,43 @@ using System.Threading.Tasks;
 
 namespace Minesweeper
 {
+    /// <summary>
+    /// Additional properties of Object HRA
+    /// </summary>
     public partial class HRA
     {
-        public override string ToString()
-        {
-            string result = new StringBuilder().Append("HRA: ")
-                .Append("ID - ").Append(this.hra_id)
-                .Append(", OblastID - ").Append(this.oblast)
-                .Append(", StavID - ").Append(this.stav)
-                .Append(", Pocet oznacenych min - ").Append(this.pocet_oznacenych_min)
-                .Append(", Cas prvni tah - ").Append(this.cas_prvni_tah)
-                .Append(", Cas posledni tah - ").Append(this.cas_posledni_tah)             
-                .ToString();
-            return result;
-        }
-
+        /// <summary>
+        /// Gets time from start of game until end of game if game is finished.
+        /// Or time from start until now, if game is still played.
+        /// </summary>
         public int Time
         {
             get
             {
-                if (cas_posledni_tah.HasValue && cas_prvni_tah.HasValue)
+                if (this.cas_posledni_tah.HasValue && this.cas_prvni_tah.HasValue)
                 {
-                    TimeSpan t = cas_posledni_tah.Value - cas_prvni_tah.Value;
+                    TimeSpan t = this.cas_posledni_tah.Value - this.cas_prvni_tah.Value;
 
-                    if (this.stav == (int) DBHelper.State.Playing)
+                    if (this.stav == (int)DBHelper.State.Playing)
                     {
-                        t = DateTimeOffset.Now - cas_prvni_tah.Value;
+                        t = DateTimeOffset.Now - this.cas_prvni_tah.Value;
                     }
-                    return (int) Math.Round(t.TotalSeconds);
+
+                    return (int)Math.Round(t.TotalSeconds);
                 }
+
                 return 0;
             }
         }
 
+        /// <summary>
+        /// Gets number of correctly found mines
+        /// </summary>
         public int FoundMines
         {
             get
             {
-                return DBHelper.GetFoundMines((int) oblast);
+                return DBHelper.GetFoundMines((int)this.oblast);
             }
         }
     }

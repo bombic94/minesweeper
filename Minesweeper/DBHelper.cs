@@ -10,15 +10,28 @@ namespace Minesweeper
     /// <summary>
     /// Static class - takes care of communication with database
     /// </summary>
-    static class DBHelper
+    public static class DBHelper
     {
         /// <summary>
         /// Enum representing state of the game
-        /// 1 - Playing: game is not finished
-        /// 2 - Won: game is finished, player had won
-        /// 3 - Lost: game is finished, player had lost
         /// </summary>
-        public enum State { Playing=1, Won=2, Lost=3 }
+        public enum State
+        {
+            /// <summary>
+            /// 1 - Playing: game is not finished
+            /// </summary>
+            Playing = 1,
+
+            /// <summary>
+            /// 2 - Won: game is finished, player had won
+            /// </summary>
+            Won = 2,
+
+            /// <summary>
+            /// 3 - Lost: game is finished, player had lost
+            /// </summary>
+            Lost = 3
+        }
 
         /// <summary>
         /// Create new OBLAST with selected level of game (OBTIZNOST)
@@ -184,10 +197,11 @@ namespace Minesweeper
                 return obtiznost;
             }
         }
+
         /// <summary>
         /// Get list of all fields in played game, order by rows and columns
         /// </summary>
-        /// <param name="obl_id">ID of OBLAST of played game<</param>
+        /// <param name="obl_id">ID of OBLAST of played game</param>
         /// <returns>Ordered list of fields in played game</returns>
         public static List<POLE> GetListPoli(int obl_id)
         {

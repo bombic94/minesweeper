@@ -95,13 +95,7 @@
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
     <Compile Include="MyModel\HRA.cs" />
-    <Compile Include="MyModel\MINA.cs" />
-    <Compile Include="MyModel\OBLAST.cs" />
-    <Compile Include="MyModel\OBTIZNOST.cs" />
-    <Compile Include="MyModel\OMEZENI.cs" />
     <Compile Include="MyModel\POLE.cs" />
-    <Compile Include="MyModel\STAV.cs" />
-    <Compile Include="MyModel\TAH.cs" />
     <Compile Include="MyViewModel\AboutVM.cs" />
     <Compile Include="MyViewModel\ContinueVM.cs" />
     <Compile Include="MyViewModel\CustomVM.cs" />

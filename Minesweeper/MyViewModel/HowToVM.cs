@@ -11,37 +11,38 @@ namespace Minesweeper.MyViewModel
     /// ViewModel for HowToWindow
     /// Contains information which will be shown in HowToWindow
     /// </summary>
-    class HowToVM
+    public class HowToVM
     {
         /// <summary>
-        /// How to start game
-        /// </summary>
-        public String StartGame { get; set; }
-
-        /// <summary>
-        /// How to continue started game
-        /// </summary>
-        public String ContinueGame { get; set; }
-
-        /// <summary>
-        /// How to play game
-        /// </summary>
-        public String Play { get; set; }
-
-        /// <summary>
-        /// Goal of game
-        /// </summary>
-        public String ToWin { get; set; }
-
-        /// <summary>
+        /// Initializes a new instance of the <see cref="HowToVM" /> class
         /// Read values from config file app.config
         /// </summary>
         public HowToVM()
         {
-            StartGame = ConfigurationManager.AppSettings["howto.start"];
-            ContinueGame = ConfigurationManager.AppSettings["howto.continue"];
-            Play = ConfigurationManager.AppSettings["howto.play"];
-            ToWin = ConfigurationManager.AppSettings["howto.win"];
+            this.StartGame = ConfigurationManager.AppSettings["howto.start"];
+            this.ContinueGame = ConfigurationManager.AppSettings["howto.continue"];
+            this.Play = ConfigurationManager.AppSettings["howto.play"];
+            this.ToWin = ConfigurationManager.AppSettings["howto.win"];
         }
+
+        /// <summary>
+        /// Gets or sets How to start game
+        /// </summary>
+        public string StartGame { get; set; }
+
+        /// <summary>
+        /// Gets or sets How to continue started game
+        /// </summary>
+        public string ContinueGame { get; set; }
+
+        /// <summary>
+        /// Gets or sets How to play game
+        /// </summary>
+        public string Play { get; set; }
+
+        /// <summary>
+        /// Gets or sets Goal of game
+        /// </summary>
+        public string ToWin { get; set; }
     }
 }

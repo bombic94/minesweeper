@@ -1,5 +1,4 @@
-﻿using Minesweeper.MyView;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Minesweeper.MyView;
 
 namespace Minesweeper.MyViewModel
 {
@@ -18,37 +18,39 @@ namespace Minesweeper.MyViewModel
     public class ContinueVM
     {
         /// <summary>
-        /// Collection of games which are not finished
-        /// </summary>
-        public ObservableCollection<HRA> Hry { get; set; }
-
-        public ICommand SelectCommand { get; set; }
-
-        /// <summary>
+        /// Initializes a new instance of the <see cref="ContinueVM" /> class
         /// When window is opened, show all games which are not finished
         /// </summary>
         public ContinueVM()
         {
-            SelectCommand = new RelayCommand(param => this.SelectGame(param));
+            this.SelectCommand = new RelayCommand(param => this.SelectGame(param));
 
             if (DesignerProperties.GetIsInDesignMode(new System.Windows.DependencyObject()))
             {
-                Hry = new ObservableCollection<HRA>();
+                this.Hry = new ObservableCollection<HRA>();
             }
             else
             {
-                Refresh();
+                this.Refresh();
             }
         }
 
         /// <summary>
+        /// Gets or sets collection of games which are not finished
+        /// </summary>
+        public ObservableCollection<HRA> Hry { get; set; }
+
+        /// <summary>
+        /// Gets or sets command for Select
+        /// </summary>
+        public ICommand SelectCommand { get; set; }
+
+        /// <summary>
         /// Get list of games from database
         /// </summary>
-        protected void Refresh()
+        private void Refresh()
         {
-            Hry = new ObservableCollection<HRA>(
-                DBHelper.GetListOfRunnningGames()
-            );
+            this.Hry = new ObservableCollection<HRA>(DBHelper.GetListOfRunnningGames());
         }
 
         /// <summary>
@@ -56,15 +58,15 @@ namespace Minesweeper.MyViewModel
         /// and close this window
         /// </summary>
         /// <param name="param">Selected game HRA</param>
-        public void SelectGame(object param)
+        private void SelectGame(object param)
         {
             HRA hra = (HRA)param;
-            int oblastID = (int) hra.oblast;
+            int oblastID = (int)hra.oblast;
 
             MainVM main = Application.Current.MainWindow.DataContext as MainVM;
             main.OblastID = oblastID;
             main.GenerateGrid();
-            Application.Current.Windows.OfType<ContinueWindow>().First().Close();           
+            Application.Current.Windows.OfType<ContinueWindow>().First().Close();
         }
     }
 }

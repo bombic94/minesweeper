@@ -1,5 +1,4 @@
-﻿using Minesweeper.MyViewModel;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +19,19 @@ namespace Minesweeper.MyView
     /// </summary>
     public partial class ContinueWindow : Window
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ContinueWindow" /> class
+        /// </summary>
         public ContinueWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Enables button when some item is selected
+        /// </summary>
+        /// <param name="sender">Sender object param</param>
+        /// <param name="e">EventArgs param</param>
         private void ListView_SelectionChanged(object sender, EventArgs e)
         {
             if (lst.SelectedIndex != -1)
