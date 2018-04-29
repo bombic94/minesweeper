@@ -191,10 +191,11 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var obtiznost = (from o in db.OBTIZNOST
-                                 join obl in db.OBLAST on o.obtiznost_id equals obl.obtiznost
-                                 where obl.oblast_id == obl_id
-                                 select o).Single();
+                var obtiznost = db.OBTIZNOST
+                    .Join(db.OBLAST, obt => obt.obtiznost_id, obl => obl.obtiznost, (obt, obl) => new { obt, obl })
+                    .Where(a => a.obl.oblast_id == obl_id)
+                    .Select(a => a.obt)
+                    .Single();
 
                 return obtiznost;
             }
@@ -346,6 +347,11 @@ namespace Minesweeper
             }
         }
 
+        /// <summary>
+        /// Get number of mines that were correctly marked in lost game
+        /// </summary>
+        /// <param name="oblastID">ID of field OBLAST</param>
+        /// <returns>Number of correctly marked mines</returns>
         public static int GetFoundMines(int oblastID)
         {
             using (var db = new postgresEntities())
