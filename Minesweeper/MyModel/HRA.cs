@@ -21,14 +21,24 @@ namespace Minesweeper
             return result;
         }
 
-        public double time { get
+        public double Time
+        {
+            get
             {
                 if (cas_posledni_tah.HasValue && cas_prvni_tah.HasValue)
                 {
                     TimeSpan t = cas_posledni_tah.Value - cas_prvni_tah.Value;
-                    return t.TotalSeconds;
+                    return Math.Round(t.TotalSeconds);
                 }
                 return 0;
+            }
+        }
+
+        public int FoundMines
+        {
+            get
+            {
+                return DBHelper.GetFoundMines((int) oblast);
             }
         }
     }

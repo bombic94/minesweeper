@@ -32,11 +32,12 @@ namespace Minesweeper
                 var results = db.HRA
                     .Where(h => h.stav == (int)State.Playing)
                     .Include(h => h.OBLAST1)
+                    .Include(h => h.OBLAST1.OBTIZNOST1)
                     .OrderBy(h => h.hra_id)
                     .ToList();
+
                 return results;
             }
-            
         }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace Minesweeper
                 };
 
                 db.OBLAST.Add(oblast);
+
                 try
                 {
                     db.SaveChanges();
@@ -70,7 +72,6 @@ namespace Minesweeper
                 {
                     return -1;
                 }
-               
             }
         }
 
@@ -173,11 +174,11 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var hra = (from h in db.HRA
-                           where h.oblast == obl_id
-                           select h).Single();
-                Console.WriteLine(hra.ToString());
-                return (int)hra.stav;
+                var stateOfGame = db.HRA
+                    .Where(h => h.oblast == obl_id)
+                    .Single().stav;
+
+                return (int)stateOfGame;
             }
         }
 
@@ -194,6 +195,7 @@ namespace Minesweeper
                                  join obl in db.OBLAST on o.obtiznost_id equals obl.obtiznost
                                  where obl.oblast_id == obl_id
                                  select o).Single();
+
                 return obtiznost;
             }
         }
@@ -206,10 +208,11 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var listPoli = (from p in db.POLE
-                                where p.oblast == obl_id
-                                orderby p.souradnice_y, p.souradnice_x
-                                select p).ToList();
+                var listPoli = db.POLE
+                    .Where(p => p.oblast == obl_id)
+                    .OrderBy(p => new { p.souradnice_y, p.souradnice_x })
+                    .ToList();
+
                 return listPoli;
             }
         }
@@ -223,9 +226,11 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var listMin = (from m in db.MINA
-                               where m.oblast == obl_id
-                               select m).ToList();
+                var listMin = db.MINA
+                    .Where(m => m.oblast == obl_id)
+                    .OrderBy(m => new { m.souradnice_y, m.souradnice_x })
+                    .ToList(); 
+
                 return listMin;
             }
         }
@@ -239,15 +244,14 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var obtiznost = (from o in db.OBTIZNOST
-                                 join obl in db.OBLAST on o.obtiznost_id equals obl.obtiznost
-                                 where obl.oblast_id == obl_id
-                                 select o).Single();
-                var hra = (from h in db.HRA
-                           join obl in db.OBLAST on h.oblast equals obl.oblast_id
-                           where obl.oblast_id == obl_id
-                           select h).Single();
-                return obtiznost.pocet_min - hra.pocet_oznacenych_min;
+                var mines = db.OBTIZNOST
+                    .Join(db.OBLAST, obt => obt.obtiznost_id, obl => obl.obtiznost, (obt, obl) => new { obt, obl })
+                    .Join(db.HRA, a => a.obl.oblast_id, hra => hra.oblast, (a, hra) => new { a.obl, a.obt, hra })
+                    .Where(a => a.obl.oblast_id == obl_id)
+                    .Select(a => a.obt.pocet_min - a.hra.pocet_oznacenych_min)
+                    .Single();
+
+                return mines;
             }
         }
 
@@ -259,10 +263,13 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var lostGames = (from h in db.HRA
-                             where h.stav == (int)State.Lost
-                             orderby h.cas_prvni_tah 
-                             select h).ToList();
+                var lostGames = db.HRA
+                    .Where(h => h.stav == (int)State.Lost)
+                    .Include(h => h.OBLAST1)
+                    .Include(h => h.OBLAST1.OBTIZNOST1)
+                    .OrderByDescending(h => h.cas_prvni_tah)
+                    .ToList();
+
                 return lostGames;
             }
         }
@@ -275,11 +282,14 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var games = (from h in db.HRA
-                             where h.stav == (int)State.Won
-                             orderby h.cas_prvni_tah
-                             select h).ToList();
-                return games;
+                var wonGames = db.HRA
+                    .Where(h => h.stav == (int)State.Won)
+                    .Include(h => h.OBLAST1)
+                    .Include(h => h.OBLAST1.OBTIZNOST1)
+                    .OrderByDescending(h => h.cas_prvni_tah)
+                    .ToList();
+
+                return wonGames;
             }
         }
 
@@ -329,8 +339,26 @@ namespace Minesweeper
         {
             using (var db = new postgresEntities())
             {
-                var omezeni = db.OMEZENI.Single();
+                var omezeni = db.OMEZENI
+                    .Single();
+
                 return omezeni;
+            }
+        }
+
+        public static int GetFoundMines(int oblastID)
+        {
+            using (var db = new postgresEntities())
+            {
+                var found = db.POLE
+                    .Join(db.MINA, p => p.oblast, m => m.oblast, (p, m) => new { p, m })
+                    .Where(a => a.p.oblast == oblastID)
+                    .Where(a => a.p.souradnice_x == a.m.souradnice_x)
+                    .Where(a => a.p.souradnice_y == a.m.souradnice_y)
+                    .Where(a => a.p.je_mina == true)
+                    .Count();
+
+                return found;
             }
         }
     }
