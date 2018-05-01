@@ -12,7 +12,7 @@
         <MyViewModel:ContinueVM/>
     </Window.DataContext>
     <Grid>
-        <ListView x:Name="lst" ItemsSource="{Binding Path=Hry, Mode=TwoWay}" SelectionChanged="ListView_SelectionChanged" Margin="10 10 10 50">
+        <ListView x:Name="lst" ItemsSource="{Binding Path=Hry, Mode=TwoWay}" SelectedItem="{Binding Selected}" Margin="10 10 10 50">
             <ListView.View>
                 <GridView>
                     <GridViewColumn  Header="ID" Width="60">
@@ -69,10 +69,8 @@
         </ListView>
         <Button x:Name="btn" 
                 Margin="450 225 10 10" 
-                Content="Select" 
-                IsEnabled="False" 
-                Command="{Binding Path=SelectCommand}" 
-                CommandParameter="{Binding ElementName=lst, Path=SelectedItem}">
+                Content="Select"
+                Command="{Binding Path=SelectCommand}">
         </Button>
     </Grid>
 </Window>
