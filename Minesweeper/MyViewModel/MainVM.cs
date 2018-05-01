@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -85,7 +86,7 @@ namespace Minesweeper.MyViewModel
             set
             {
                 this.numColumns = value;
-                this.OnPropertyChanged("NumColumns");
+                this.OnPropertyChanged();
             }
         }
 
@@ -102,7 +103,7 @@ namespace Minesweeper.MyViewModel
             set
             {
                 this.numRows = value;
-                this.OnPropertyChanged("numRows");
+                this.OnPropertyChanged();
             }
         }
 
@@ -119,7 +120,7 @@ namespace Minesweeper.MyViewModel
             set
             {
                 this.pole = value;
-                this.OnPropertyChanged("Pole");
+                this.OnPropertyChanged();
             }
         }
 
@@ -136,7 +137,7 @@ namespace Minesweeper.MyViewModel
             set
             {
                 this.remainingMines = value;
-                this.OnPropertyChanged("remainingMines");
+                this.OnPropertyChanged();
             }
         }
 
@@ -153,7 +154,7 @@ namespace Minesweeper.MyViewModel
             set
             {
                 this.time = value;
-                this.OnPropertyChanged("time");
+                this.OnPropertyChanged();
             }
         }
         
@@ -230,7 +231,7 @@ namespace Minesweeper.MyViewModel
         /// OnPropertyChange handling
         /// </summary>
         /// <param name="name">Property to change</param>
-        protected void OnPropertyChanged(string name)
+        protected void OnPropertyChanged([CallerMemberName] string name = "")
         {
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
